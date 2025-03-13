@@ -1,4 +1,9 @@
-const Card = ({ title, data }) => {
+type CardProps = {
+  title: string;
+  data: number | string;
+}
+
+const Card = ({ title, data }:CardProps) => {
   return (
     <div className="card card-normal bg-base-100 w-48 shadow-xl m-auto text-center card-data">
       <div className="card-body">

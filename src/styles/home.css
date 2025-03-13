@@ -33,6 +33,8 @@
     position: fixed;
     top: 81%;
     left: 60%;
+    border: 5px solid red;
+
 }
 
 .login-btn {

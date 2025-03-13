@@ -1,14 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import "../styles/home.css";
-import { useContext, useState } from "react";
-import { useForm } from "react-hook-form";
+import {  useState } from "react";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { callApi } from "../utils/callApi";
-import AuthContext from "../context/AuthContext";
+import  { useAuth } from "../context/AuthContext";
 import { IoEyeOutline } from "react-icons/io5";
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  const { setUserDetails, userDetails } = useContext(AuthContext);
+  const AuthContext = useAuth();
+  const { setUserDetails } = AuthContext;
   const [showPwd, setShowPwd] = useState(false);
   const emailRegex = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
   const {
@@ -18,7 +19,7 @@ const LoginForm = () => {
     setError,
   } = useForm();
 
-  const handleLogin = async (data) => {
+  const handleLogin: SubmitHandler<FieldValues> = async (data) => {
     try {
       const response = await callApi("/users/login", "POST", data);
       // console.log("login response", response)
@@ -54,7 +55,7 @@ const LoginForm = () => {
                 <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
               </svg>
               <input
-                name="email"
+                
                 type="text"
                 className="grow"
                 placeholder="Email"
@@ -66,8 +67,8 @@ const LoginForm = () => {
                 })}
               />
             </label>
-            {errors.email && (
-              <div className="text-red-500">{errors.email.message}</div>
+            {errors.email?.message && (
+              <div className="text-red-500">{String(errors.email.message)}</div>
             )}
             <label className="input input-bordered flex items-center gap-2">
               <svg
@@ -99,7 +100,7 @@ const LoginForm = () => {
               </span>
             </label>
             {errors.password && (
-              <div className="text-red-500">{errors.password.message}</div>
+              <div className="text-red-500">{String(errors.password.message)}</div>
             )}
           </div>
           <button

@@ -6,11 +6,26 @@ import { useContext } from "react";
 
 import TaskContext from "../context/TaskContext";
 import DeleteTaskModal from "./DeleteTaskModal";
+import { TaskDetailsType } from "../types/types";
 
-const TasksToday = ({ weekDay }) => {
-  const { taskList, handleTaskUpdate } = useContext(TaskContext);
-
-  const [tasksToday, setTasksToday] = useState({
+type TasksOnDayXProps = {
+  handleTaskUpdate: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    task: TaskDetailsType
+  ) => void;
+  taskList: TaskDetailsType[];
+  weekDay: string;
+};
+const TasksOnDayX = ({
+  handleTaskUpdate,
+  taskList,
+  weekDay,
+}: TasksOnDayXProps) => {
+  const [tasksToday, setTasksToday] = useState<{
+    health: TaskDetailsType[];
+    wealth: TaskDetailsType[];
+    knowledge: TaskDetailsType[];
+  }>({
     health: [],
     wealth: [],
     knowledge: [],
@@ -51,9 +66,8 @@ const TasksToday = ({ weekDay }) => {
       <div className="tasks">
         {tasksToday.health?.length > 0 ? (
           tasksToday.health.map((task) => (
-            <div className="task-h1-input" key={task._id}>
-               <DeleteTaskModal task={task} />{" "}
-              {" "}
+            <div className="task-h1-input" key={task.taskId}>
+              <DeleteTaskModal task={task} />{" "}
               <input
                 type="checkbox"
                 className="checkbox checkbox-accent"
@@ -63,8 +77,11 @@ const TasksToday = ({ weekDay }) => {
                 onChange={(e) => handleTaskUpdate(e, task)}
               />{" "}
               <h4
-                onClick={(e) => document.getElementById(task._id).showModal()}
-                key={task._id}
+                onClick={() => {
+                  const modal = document.getElementById(String(task.taskId)) as HTMLDialogElement;
+                  modal?.showModal()
+                }}
+                key={task.taskId}
                 className={task.isCompleted ? "completed" : ""}
               >
                 {task.taskName}
@@ -82,9 +99,8 @@ const TasksToday = ({ weekDay }) => {
       <div className="tasks">
         {tasksToday.wealth?.length > 0 ? (
           tasksToday.wealth.map((task) => (
-            <div className="task-h1-input" key={task._id}>
-               <DeleteTaskModal task={task} />{" "}
-              {" "}
+            <div className="task-h1-input" key={task.taskId}>
+              <DeleteTaskModal task={task} />{" "}
               <input
                 className="checkbox checkbox-accent"
                 type="checkbox"
@@ -93,9 +109,12 @@ const TasksToday = ({ weekDay }) => {
                 checked={task.isCompleted}
                 onChange={(e) => handleTaskUpdate(e, task)}
               />{" "}
-             <h4
-                onClick={(e) => document.getElementById(task._id).showModal()}
-                key={task._id}
+              <h4
+                onClick={() => {
+                  const modal = document.getElementById(String(task.taskId)) as HTMLDialogElement;
+                  modal?.showModal()
+                }}
+                key={task.taskId}
                 className={task.isCompleted ? "completed" : ""}
               >
                 {task.taskName}
@@ -114,8 +133,8 @@ const TasksToday = ({ weekDay }) => {
       <div className="tasks">
         {tasksToday.knowledge?.length > 0 ? (
           tasksToday.knowledge.map((task) => (
-            <div className="task-h1-input" key={task._id}>
-               <DeleteTaskModal task={task} />{" "}
+            <div className="task-h1-input" key={task.taskId}>
+              <DeleteTaskModal task={task} />{" "}
               <input
                 type="checkbox"
                 checked={task.isCompleted}
@@ -124,9 +143,12 @@ const TasksToday = ({ weekDay }) => {
                 id="task"
                 className="checkbox checkbox-accent"
               />{" "}
-             <h4
-                onClick={(e) => document.getElementById(task._id).showModal()}
-                key={task._id}
+              <h4
+                onClick={() => {
+                  const modal = document.getElementById(String(task.taskId)) as HTMLDialogElement;
+                  modal?.showModal()
+                }}
+                key={task.taskId}
                 className={task.isCompleted ? "completed" : ""}
               >
                 {task.taskName}
@@ -144,4 +166,4 @@ const TasksToday = ({ weekDay }) => {
   );
 };
 
-export default TasksToday;
+export default TasksOnDayX;

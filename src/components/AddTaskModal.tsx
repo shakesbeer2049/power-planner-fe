@@ -7,14 +7,10 @@ import * as taskService from "../utils/taskService";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TaskContext from "../context/TaskContext";
-import AuthContext from "../context/AuthContext";
-import MultiSelect from "./MultiSelect";
+import { useAuth } from "../context/AuthContext";
+// import MultiSelect from "./MultiSelect";
 
-type TaskDetailsType = {
-  taskName: string;
-  taskRepeatsOn: string[];
-  taskCategory: string;
-};
+import { TaskDetailsType } from "../types/types";
 
 const AddTaskModal = () => {
   const taskContext = useContext(TaskContext);
@@ -22,12 +18,17 @@ const AddTaskModal = () => {
     throw new Error("TaskContext not found");
   }
   const { taskList, setTaskList } = taskContext;
-  const { userDetails } = useContext(AuthContext);
+  const context = useAuth();
+  const { userDetails } = context;
 
   const [taskDetails, setTaskDetails] = useState<TaskDetailsType>({
+    taskId: "",
     taskName: "",
     taskRepeatsOn: [],
     taskCategory: "",
+    relatedUserId: "",
+    isCompleted: false,
+    createdOn: "",
   });
 
   //handle task input
@@ -44,7 +45,7 @@ const AddTaskModal = () => {
       taskCategory: taskDetails.taskCategory,
       taskRepeatsOn: taskDetails.taskRepeatsOn,
       isCompleted: false,
-      relatedUserId: userDetails._id,
+      relatedUserId: userDetails?._id,
     };
 
     // validate fields
@@ -145,9 +146,8 @@ const AddTaskModal = () => {
               options={getDaysLeft()}
               isMulti
               hideSelectedOptions={true}
-              allowSelectAll={true}
               placeholder="Repeats on"
-              style={{ "z-index": 5 }}
+              // styles ={{ "z-index": 5 }}
               onChange={taskRepeatsOnHandler}
               closeMenuOnSelect={false}
               blurInputOnSelect={false}
@@ -155,7 +155,7 @@ const AddTaskModal = () => {
                 value: day,
                 label: day,
               }))}
-              maxMenuHeight:string="100px"
+              maxMenuHeight={100}
               styles={selectStyles}
             />
           </div>

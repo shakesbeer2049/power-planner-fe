@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 
 import "../styles/stats.css";
 import Card from "./Card";
@@ -17,7 +17,7 @@ const Stats = () => {
   const [stats, setStats] = useState({
     totalTasks: 0,
     completedTasks: 0,
-    achievedPercent: 0,
+    achievedPercent: "0",
   });
   const [selectedStat, setSelectedStat] = useState("overall");
 

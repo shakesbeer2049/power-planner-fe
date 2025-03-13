@@ -6,12 +6,17 @@ import "react-toastify/dist/ReactToastify.css";
 import { TbMoodEmpty } from "react-icons/tb";
 import Task from "./Task";
 
-import TaskContext from "../context/TaskContext";
-
+import TaskContext, { useTask } from "../context/TaskContext";
+import { TaskDetailsType } from "../types/types";
 const TasksToday = () => {
-  const { taskList, handleTaskUpdate } = useContext(TaskContext);
-
-  const [tasksToday, setTasksToday] = useState({
+  const TaskContext = useTask()
+  const { taskList, handleTaskUpdate } = TaskContext;
+  
+  const [tasksToday, setTasksToday] = useState<{
+    health: TaskDetailsType[];
+    wealth: TaskDetailsType[];
+    knowledge: TaskDetailsType[];
+  }>({
     health: [],
     wealth: [],
     knowledge: [],

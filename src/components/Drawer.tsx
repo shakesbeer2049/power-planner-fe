@@ -1,19 +1,19 @@
 import "../styles/drawer.css";
 import { AiOutlineMenu } from "react-icons/ai";
-import TaskProgress from "../trashed/TaskProgress";
 import AddTaskModal from "./AddTaskModal";
 import XPBar from "./UserProfile";
 import { Link, Outlet } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { HiChevronDoubleUp } from "react-icons/hi";
-import AuthContext from "../context/AuthContext";
-import TaskContext from "../context/TaskContext";
+import AuthContext, { useAuth } from "../context/AuthContext";
+import TaskContext, { useTask } from "../context/TaskContext";
 import useApiCaller from "../hooks/useApiCaller";
+import { DrawerProps } from "../types/types";
 
-const Drawer = ({ selectedMenu, setSelectedMenu }) => {
+const Drawer: React.FC<DrawerProps> = ({ selectedMenu, setSelectedMenu }) => {
   const [drawerState, setDrawerState] = useState(false);
-  const { taskList, setTaskList } = useContext(TaskContext);
-  const { handleLogout } = useContext(AuthContext);
+  const TaskContext = useTask();
+  const AuthContext = useAuth();
 
   return (
     <div className="main-model lg:flex">
@@ -38,7 +38,7 @@ const Drawer = ({ selectedMenu, setSelectedMenu }) => {
               <AiOutlineMenu />
             </label>
             {/* XP BAR */}
-            <XPBar taskList={taskList} />
+            <XPBar taskList={TaskContext.taskList} />
           </div>
         </div>
 
@@ -64,9 +64,12 @@ const Drawer = ({ selectedMenu, setSelectedMenu }) => {
               {/* Open the modal using document.getElementById('ID').showModal() method */}
               <button
                 className="btn btn-primary mb-1"
-                onClick={() =>
-                  document.getElementById("add_task_modal").showModal()
-                }
+                onClick={() => {
+                  const modal = document.getElementById(
+                    "add_task_modal"
+                  ) as HTMLDialogElement;
+                  modal?.showModal(); // Use optional chaining to avoid null errors
+                }}
               >
                 Add Task
               </button>
@@ -111,7 +114,7 @@ const Drawer = ({ selectedMenu, setSelectedMenu }) => {
               <Link to="stats">Stats</Link>
             </li>
 
-            <li className="" onClick={handleLogout}>
+            <li className="" onClick={AuthContext.handleLogout}>
               <button className="btn btn-error logout-btn ">Logout</button>
             </li>
           </ul>

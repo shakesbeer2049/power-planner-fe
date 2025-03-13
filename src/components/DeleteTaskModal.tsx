@@ -1,21 +1,25 @@
 import { useContext } from "react";
-import TaskContext from "../context/TaskContext";
+import TaskContext, { useTask } from "../context/TaskContext";
 import * as taskService from "../utils/taskService";
-import { toast } from "react-toastify";
 
-const DeleteTaskModal = ({ task }) => {
-  const { handleTaskDelete } = useContext(TaskContext);
+import { DeleteTaskModalProps } from "../types/types";
+
+const DeleteTaskModal:React.FC<DeleteTaskModalProps> = ({ task }) => {
+
+  const context = useTask();
+
+ 
 
   return (
     <>
-      <dialog id={task._id} className="modal">
+      <dialog id={task.taskId} className="modal">
         <div className="modal-box">
           <h3 className="font-bold text-lg">Delete this task!</h3>
           <p className="py-4">Click Delete to confirm or Close to cancel.</p>
           <div className="modal-action">
             <button
               className="btn btn-error"
-              onClick={() => handleTaskDelete(task)}
+              onClick={() => context.handleTaskDelete(task)}
               disabled = {task.isCompleted}
             >
               Delete

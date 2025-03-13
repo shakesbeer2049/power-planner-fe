@@ -1,14 +1,20 @@
 import { useContext, useEffect, useState } from "react";
-import AuthContext from "../context/AuthContext";
+import AuthContext, { useAuth } from "../context/AuthContext";
 import "../styles/userprofile.css";
 import { MdHealthAndSafety } from "react-icons/md";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import { GiBrain } from "react-icons/gi";
 import { getToday } from "../utils/daysAndDates";
 import { CiCircleInfo } from "react-icons/ci";
+import { TaskDetailsType } from "../types/types";
 
-const UserProfile = ({ taskList }) => {
-  const { userDetails } = useContext(AuthContext);
+type TaskListType = {
+  taskList: TaskDetailsType[];
+};
+
+const UserProfile = ({ taskList }:TaskListType) => {
+  const AuthContext = useAuth();
+  const { userDetails } = AuthContext;
   const [taskCount, setTaskCount] = useState({ totalToday: 0, completed: 0 });
   const [hoverXP, setHoverXP] = useState(false);
   const [hoverTasks, setHoverTasks] = useState(false);
@@ -24,14 +30,17 @@ const UserProfile = ({ taskList }) => {
         if (element.isCompleted) completedToday += 1;
       }
     }
-    setTaskCount({ totalToday: tasksToday, completed: completedToday });
+    setTaskCount({ totalToday: tasksToday.length, completed: completedToday });
   }, [taskList]);
 
   return (
     <>
       <button
         className="user-details"
-        onClick={() => document.getElementById("user-legend").showModal()}
+        onClick={() => {
+          const modal = document.getElementById("user-legend") as HTMLDialogElement
+          modal?.showModal();
+        }}
       >
         {/* MAIN BAR */}
         <div className="avatar-user-lvl flex">
@@ -44,9 +53,9 @@ const UserProfile = ({ taskList }) => {
             </div>
           </div>
           <div className="user-lvl">
-            <h1 className="text-black">{userDetails.username || "robot"}</h1>
+            <h1 className="text-black">{userDetails?.username || "robot"}</h1>
 
-            <h1>lvl {userDetails.lvl || 0} </h1>
+            <h1>lvl {userDetails?.lvl || 0} </h1>
           </div>
         </div>
         <div className="xpbar">
@@ -59,8 +68,8 @@ const UserProfile = ({ taskList }) => {
 
           <progress
             className="progress progress-success w-24"
-            value={userDetails.xp || 0}
-            max={userDetails.nextXP || 0}
+            value={userDetails?.xp || 0}
+            max={userDetails?.nextXP || 0}
           ></progress>
           <br />
           <CiCircleInfo
@@ -72,7 +81,7 @@ const UserProfile = ({ taskList }) => {
           <progress
             className="progress progress-error w-24"
             value={taskCount.completed || 0}
-            max={taskCount.totalToday.length || 0}
+            max={taskCount.totalToday || 0}
           ></progress>
         </div>
       </button>
@@ -97,23 +106,23 @@ const UserProfile = ({ taskList }) => {
                 </div>
                 {/* Name */}
                 <div className="lvl-rank">
-                  <span> {userDetails.rank || "Recruit"}</span>
+                  <span> {userDetails?.rank || "Recruit"}</span>
                   <br />
-                  <span> LEVEL {userDetails.lvl || 0}</span>
+                  <span> LEVEL {userDetails?.lvl || 0}</span>
                 </div>
               </div>
               <div className="progress-bar">
                 <progress
                   className="progress progress-success w-36"
-                  value={userDetails.xp || 0}
-                  max={userDetails.nextXP || 0}
+                  value={userDetails?.xp || 0}
+                  max={userDetails?.nextXP || 0}
                 ></progress>
                 <br />
 
                 <br />
                 <div className="xps w-40">
-                  <span>{userDetails.xp || 0}</span>
-                  <span>{userDetails.nextXP || 0}</span>
+                  <span>{userDetails?.xp || 0}</span>
+                  <span>{userDetails?.nextXP || 0}</span>
                 </div>
               </div>
             </div>
@@ -121,20 +130,20 @@ const UserProfile = ({ taskList }) => {
               <div className="points">
                 <div className="xp flex justify-around">
                   <label htmlFor="xp">XP</label>
-                  <span> {userDetails.xp || 0}</span>
+                  <span> {userDetails?.xp || 0}</span>
                 </div>
                 <div className="hp flex justify-around">
                   <MdHealthAndSafety className="text-3xl text-red-800" />
-                  <span> {userDetails.hp || 0}</span>
+                  <span> {userDetails?.hp || 0}</span>
                 </div>
                 <div className="wp flex justify-around">
                   <RiMoneyDollarCircleFill className="text-3xl text-green-700" />
 
-                  <span> {userDetails.wp || 0}</span>
+                  <span> {userDetails?.wp || 0}</span>
                 </div>
                 <div className="kp flex justify-around">
                   <GiBrain className="text-3xl text-pink-500" />
-                  <span> {userDetails.kp || 0}</span>
+                  <span> {userDetails?.kp || 0}</span>
                 </div>
               </div>
             </div>

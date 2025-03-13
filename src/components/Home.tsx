@@ -1,15 +1,17 @@
 import { HiChevronDoubleUp } from "react-icons/hi";
 import "../styles/home.css";
-import { useRef, useContext, useEffect } from "react";
-import AuthContext from "../context/AuthContext";
+import { useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 import SignupForm from "./SignupForm";
 import LoginForm from "./LoginForm";
 import { jwtDecode } from "jwt-decode";
 import { callApi } from "../utils/callApi";
 import { Link } from "react-router-dom";
+import { CustomJWTPayload } from "../types/types";
 
 const Home = () => {
-  const { setUserDetails, userDetails, handleLogout } = useContext(AuthContext);
+  const AuthContext = useAuth();
+  const { setUserDetails, userDetails, handleLogout } = AuthContext;
 
   useEffect(() => {
     (async () => {
@@ -17,9 +19,9 @@ const Home = () => {
       let userId = "";
 
       if (jwt) {
-        userId = jwtDecode(jwt).id;
+        userId = jwtDecode<CustomJWTPayload>(jwt).id;
         if (userId) {
-          const verifyUser = await callApi("/home", "GET", {}, jwt);
+          const verifyUser = await callApi("/home", "GET", {});
           if (verifyUser.status === "success") {
             setUserDetails(verifyUser.data);
           }
@@ -51,7 +53,7 @@ const Home = () => {
                 <button
                   className="btn btn-success"
                   onClick={() =>
-                    document.getElementById("login-modal").showModal()
+                    (document.getElementById("login-modal") as HTMLDialogElement)?.showModal()
                   }
                 >
                   Login
@@ -64,7 +66,7 @@ const Home = () => {
                 <button
                   className="btn btn-primary"
                   onClick={() =>
-                    document.getElementById("sign-up-modal").showModal()
+                    (document.getElementById("sign-up-modal") as HTMLDialogElement).showModal()
                   }
                 >
                   Sign Up
@@ -80,7 +82,6 @@ const Home = () => {
         <img
           src="dist/images/banner.jpg"
           alt=""
-          srcset=""
           className="landing-image"
         />
         <h2 className="heading">

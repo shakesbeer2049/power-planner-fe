@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-export default function useApiCaller(url, callType, body) {
-  const [data, setData] = useState(null);
+import { TaskDetailsType } from "../types/types";
+export default function useApiCaller(url:string, callType:string, body:{}) {
+  const [data, setData] = useState<TaskDetailsType[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(null);
+  const [isError, setIsError] = useState<Error|null>(null);
 
   useEffect(() => {
     const jwt = localStorage.getItem("token");
@@ -29,10 +30,11 @@ export default function useApiCaller(url, callType, body) {
         const data = response.data.data;
         setData(data);
       } catch (error) {
+        const err = error instanceof Error ? error : new Error(String(error));
         console.log(error, "error in fetching data");
-        setIsError(error);
+        setIsError(err);
         if (
-          error.message == "Request failed with status code 401" ||
+          err.message == "Request failed with status code 401" ||
           error == "Unauthorized"
         )
           window.location.href = "https://power-planner-fe-rpuw.onrender.com";
@@ -65,8 +67,9 @@ export default function useApiCaller(url, callType, body) {
       const data = response.data.data;
       setData(data);
     } catch (error) {
-      console.log(error, "error in fetching data");
-      setIsError(error);
+      const err = error instanceof Error ? error : new Error(String(error));
+      console.log(err, "error in fetching data");
+      setIsError(err);
     } finally {
       setIsLoading(false);
     }

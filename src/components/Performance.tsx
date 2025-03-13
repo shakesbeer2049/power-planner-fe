@@ -2,9 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import { getYears, months, getWeekOfMonth } from "../utils/daysAndDates";
 import TaskContext from "../context/TaskContext";
 import { callApi } from "../utils/callApi";
+import { TaskDetailsType } from "../types/types";
 
-export default Performance = () => {
+const Performance:React.FC = () => {
   // const { taskList } = useContext(TaskContext);
+  
   const [taskList, setTaskList] = useState([]);
   useEffect(() => {
     const fetchAllTasks = async () => {
@@ -30,26 +32,26 @@ export default Performance = () => {
   ];
 
   const [year, setYear] = useState(years[years.length - 1]);
-  const [month, setMonth] = useState(null);
+  const [month, setMonth] = useState("");
 
-  const handleYearSelect = (e) => {
-    setYear(e.target.value);
+  const handleYearSelect = (e:React.ChangeEvent<HTMLSelectElement>) => {
+    setYear(Number(e.target.value));
   };
 
-  const handleMonthSelect = (e) => {
+  const handleMonthSelect = (e:React.ChangeEvent<HTMLSelectElement>) => {
     setMonth(e.target.value);
   };
-
+ 
   const makeMonthlyData = () => {
     // get the tasks created this year
-    const tasksThisYear = taskList.filter((task) =>
-      task.createdOn.includes(year)
+    const tasksThisYear = taskList.filter((task:TaskDetailsType) =>
+      task.createdOn.includes(String(year))
     );
 
-    const monthlyTasksArray = Array.from({ length: 12 }, () => []);
+    const monthlyTasksArray: TaskDetailsType[][] = Array.from({ length: 12 }, () => []);
 
     if (tasksThisYear) {
-      tasksThisYear.forEach((task) => {
+      tasksThisYear.forEach((task:TaskDetailsType) => {
         const month = new Date(task.createdOn).getMonth();
         monthlyTasksArray[month].push(task);
       });
@@ -90,7 +92,7 @@ export default Performance = () => {
     }
 
     // Get the tasks created in the specified month of this year
-    const tasksThisMonth = taskList.filter((task) => {
+    const tasksThisMonth = taskList.filter((task:TaskDetailsType) => {
       const taskDate = new Date(task.createdOn);
 
       return (
@@ -98,10 +100,10 @@ export default Performance = () => {
       );
     });
     // Initialize an array for the weeks in the selected month (maximum of 6 weeks)
-    const weeklyTasksArray = Array.from({ length: 5 }, () => []);
+    const weeklyTasksArray:TaskDetailsType[][] = Array.from({ length: 5 }, () => []);
 
     // Function to calculate which week of the month the task belongs to
-    const getWeekOfMonth = (date) => {
+    const getWeekOfMonth = (date:Date) => {
       const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
       const dayOfMonth = date.getDate();
       const firstDayOfWeek = firstDayOfMonth.getDay(); // Day of the week the month starts on
@@ -110,7 +112,7 @@ export default Performance = () => {
     };
 
     if (tasksThisMonth.length > 0) {
-      tasksThisMonth.forEach((task) => {
+      tasksThisMonth.forEach((task:TaskDetailsType) => {
         const taskDate = new Date(task.createdOn);
         const week = getWeekOfMonth(taskDate) - 1; // Zero-based index for the week
         weeklyTasksArray[week].push(task);
@@ -230,3 +232,5 @@ export default Performance = () => {
     </>
   );
 };
+
+export default Performance;

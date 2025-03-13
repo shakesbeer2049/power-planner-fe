@@ -2,12 +2,13 @@ import { GiFalconMoon } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import "../styles/home.css";
 import { useRef, useContext } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, FieldValue, FieldValues } from "react-hook-form";
 import { callApi } from "../utils/callApi";
-import AuthContext from "../context/AuthContext";
+import AuthContext, { useAuth } from "../context/AuthContext";
 
 const SignupForm = () => {
-  const { setUserDetails, userDetails } = useContext(AuthContext);
+  const AuthContext = useAuth();
+  const { setUserDetails } = AuthContext;
   const emailRegex = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
   const {
     register,
@@ -18,7 +19,7 @@ const SignupForm = () => {
 
   const password = watch("password");
 
-  const handleSignup = async (data) => {
+  const handleSignup:SubmitHandler<FieldValues> = async (data) => {
     const response = await callApi("/users/register", "POST", data);
     if (response.status === "success" && response.token) {
       // Storing the JWT
@@ -46,7 +47,6 @@ const SignupForm = () => {
                 <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
               </svg>
               <input
-                name="email"
                 type="text"
                 className="grow"
                 placeholder="Email"
@@ -59,7 +59,7 @@ const SignupForm = () => {
               />
             </label>
             {errors.email && (
-              <div className="text-red-500">{errors.email.message}</div>
+              <div className="text-red-500">{String(errors.email.message)}</div>
             )}
             <label className="input input-bordered flex items-center gap-2">
               <svg
@@ -84,7 +84,7 @@ const SignupForm = () => {
               />
             </label>
             {errors.username && (
-              <div className="text-red-500">{errors.username.message}</div>
+              <div className="text-red-500">{String(errors.username.message)}</div>
             )}
             <label className="input input-bordered flex items-center gap-2">
               <svg
@@ -113,7 +113,7 @@ const SignupForm = () => {
               />
             </label>
             {errors.password && (
-              <div className="text-red-500">{errors.password.message}</div>
+              <div className="text-red-500">{String(errors.password.message)}</div>
             )}
             <label className="input input-bordered flex items-center gap-2">
               <svg
@@ -141,7 +141,7 @@ const SignupForm = () => {
             </label>
             {errors.confirmPassword && (
               <div className="text-red-500">
-                {errors.confirmPassword.message}
+                {String(errors.confirmPassword.message)}
               </div>
             )}
             <button
