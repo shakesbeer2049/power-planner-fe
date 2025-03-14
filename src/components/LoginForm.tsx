@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import "../styles/home.css";
-import {  useState } from "react";
+import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { callApi } from "../utils/callApi";
-import  { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext.tsx";
 import { IoEyeOutline } from "react-icons/io5";
 
 const LoginForm = () => {
@@ -55,7 +55,6 @@ const LoginForm = () => {
                 <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
               </svg>
               <input
-                
                 type="text"
                 className="grow"
                 placeholder="Email"
@@ -100,7 +99,9 @@ const LoginForm = () => {
               </span>
             </label>
             {errors.password && (
-              <div className="text-red-500">{String(errors.password.message)}</div>
+              <div className="text-red-500">
+                {String(errors.password.message)}
+              </div>
             )}
           </div>
           <button
@@ -117,7 +118,7 @@ const LoginForm = () => {
         <div className="modal-action">
           <form method="dialog">
             {/* if there is a button in form, it will close the modal */}
-            <button className="btn">Close</button>
+            <button className="btn close-btn">Close</button>
           </form>
         </div>
       </div>

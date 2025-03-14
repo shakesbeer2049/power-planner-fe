@@ -1,7 +1,7 @@
-import { HiChevronDoubleUp } from "react-icons/hi";
 import "../styles/home.css";
+import { HiChevronDoubleUp } from "react-icons/hi";
 import { useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext.tsx";
 import SignupForm from "./SignupForm";
 import LoginForm from "./LoginForm";
 import { jwtDecode } from "jwt-decode";
@@ -53,7 +53,11 @@ const Home = () => {
                 <button
                   className="btn btn-success"
                   onClick={() =>
-                    (document.getElementById("login-modal") as HTMLDialogElement)?.showModal()
+                    (
+                      document.getElementById(
+                        "login-modal"
+                      ) as HTMLDialogElement
+                    )?.showModal()
                   }
                 >
                   Login
@@ -66,7 +70,11 @@ const Home = () => {
                 <button
                   className="btn btn-primary"
                   onClick={() =>
-                    (document.getElementById("sign-up-modal") as HTMLDialogElement).showModal()
+                    (
+                      document.getElementById(
+                        "sign-up-modal"
+                      ) as HTMLDialogElement
+                    ).showModal()
                   }
                 >
                   Sign Up
@@ -79,11 +87,7 @@ const Home = () => {
       </div>
 
       <div className="banner-container">
-        <img
-          src="dist/images/banner.jpg"
-          alt=""
-          className="landing-image"
-        />
+        <img src="dist/images/banner.jpg" alt="" className="landing-image" />
         <h2 className="heading">
           Motivation is temporary; <br /> Discipline is permanent.
         </h2>

@@ -9,18 +9,14 @@
 
 .landing-image {
     width: 100vw;
-    /* Make sure it fits the full viewport width */
-    height: 89vh;
-    /* Make sure it fits the full viewport height */
+    height: 100vh;
     object-fit: cover;
-    max-width: 100%;
-    max-height: 100%;
 }
 
 .heading {
     position: absolute;
-    top: 63%;
-    left: 63%;
+    top: 15%;
+    left: 10%;
     color: wheat;
     font-size: 18px;
 }
@@ -30,41 +26,53 @@
 }
 
 .signup-btn {
-    position: fixed;
-    top: 81%;
-    left: 60%;
-    border: 5px solid red;
+    display: block;
+    margin: 20px auto;
+}
 
+.close-btn-signup {
+    margin-top: -157%;
 }
 
 .login-btn {
-    position: fixed;
-    top: 74%;
-    left: 60%;
+    display: block;
+    margin: 20px auto;
 }
 
-@media (max-width:768px) {
-    .heading {
-        position: absolute;
-        top: 15%;
-        left: 10%;
-        color: wheat;
+.close-btn {
+    display: block;
+    margin: 20px auto;
+}
 
+.modal-box {
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+}
+
+@media (min-width: 768px) {
+    .modal-box {
+        width: 50%;
     }
 
-    .landing-image {
-
-        height: 100vh;
-
+    .heading {
+        top: 63%;
+        left: 63%;
     }
 
     .signup-btn {
-        left: 45%;
+        margin-top: 5%;
+        margin-left: 43%;
     }
 
     .login-btn {
-        left: 43%;
-        top: 74%;
+        margin-top: 11px;
+        position: static;
     }
 
+    .close-btn {
+        position: absolute;
+        top: 80%;
+        left: 80%;
+    }
 }

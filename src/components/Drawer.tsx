@@ -3,11 +3,10 @@ import { AiOutlineMenu } from "react-icons/ai";
 import AddTaskModal from "./AddTaskModal";
 import XPBar from "./UserProfile";
 import { Link, Outlet } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { HiChevronDoubleUp } from "react-icons/hi";
-import AuthContext, { useAuth } from "../context/AuthContext";
-import TaskContext, { useTask } from "../context/TaskContext";
-import useApiCaller from "../hooks/useApiCaller";
+import { useAuth } from "../context/AuthContext.tsx";
+import { useTask } from "../context/TaskContext";
 import { DrawerProps } from "../types/types";
 
 const Drawer: React.FC<DrawerProps> = ({ selectedMenu, setSelectedMenu }) => {

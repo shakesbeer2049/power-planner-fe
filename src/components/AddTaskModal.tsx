@@ -7,7 +7,7 @@ import * as taskService from "../utils/taskService";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TaskContext from "../context/TaskContext";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext.tsx";
 // import MultiSelect from "./MultiSelect";
 
 import { TaskDetailsType } from "../types/types";

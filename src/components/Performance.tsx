@@ -1,12 +1,11 @@
-import { useContext, useEffect, useState } from "react";
-import { getYears, months, getWeekOfMonth } from "../utils/daysAndDates";
-import TaskContext from "../context/TaskContext";
+import { useEffect, useState } from "react";
+import { getYears, months } from "../utils/daysAndDates";
 import { callApi } from "../utils/callApi";
 import { TaskDetailsType } from "../types/types";
 
-const Performance:React.FC = () => {
+const Performance: React.FC = () => {
   // const { taskList } = useContext(TaskContext);
-  
+
   const [taskList, setTaskList] = useState([]);
   useEffect(() => {
     const fetchAllTasks = async () => {
@@ -34,24 +33,27 @@ const Performance:React.FC = () => {
   const [year, setYear] = useState(years[years.length - 1]);
   const [month, setMonth] = useState("");
 
-  const handleYearSelect = (e:React.ChangeEvent<HTMLSelectElement>) => {
+  const handleYearSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setYear(Number(e.target.value));
   };
 
-  const handleMonthSelect = (e:React.ChangeEvent<HTMLSelectElement>) => {
+  const handleMonthSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setMonth(e.target.value);
   };
- 
+
   const makeMonthlyData = () => {
     // get the tasks created this year
-    const tasksThisYear = taskList.filter((task:TaskDetailsType) =>
+    const tasksThisYear = taskList.filter((task: TaskDetailsType) =>
       task.createdOn.includes(String(year))
     );
 
-    const monthlyTasksArray: TaskDetailsType[][] = Array.from({ length: 12 }, () => []);
+    const monthlyTasksArray: TaskDetailsType[][] = Array.from(
+      { length: 12 },
+      () => []
+    );
 
     if (tasksThisYear) {
-      tasksThisYear.forEach((task:TaskDetailsType) => {
+      tasksThisYear.forEach((task: TaskDetailsType) => {
         const month = new Date(task.createdOn).getMonth();
         monthlyTasksArray[month].push(task);
       });
@@ -92,7 +94,7 @@ const Performance:React.FC = () => {
     }
 
     // Get the tasks created in the specified month of this year
-    const tasksThisMonth = taskList.filter((task:TaskDetailsType) => {
+    const tasksThisMonth = taskList.filter((task: TaskDetailsType) => {
       const taskDate = new Date(task.createdOn);
 
       return (
@@ -100,10 +102,13 @@ const Performance:React.FC = () => {
       );
     });
     // Initialize an array for the weeks in the selected month (maximum of 6 weeks)
-    const weeklyTasksArray:TaskDetailsType[][] = Array.from({ length: 5 }, () => []);
+    const weeklyTasksArray: TaskDetailsType[][] = Array.from(
+      { length: 5 },
+      () => []
+    );
 
     // Function to calculate which week of the month the task belongs to
-    const getWeekOfMonth = (date:Date) => {
+    const getWeekOfMonth = (date: Date) => {
       const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
       const dayOfMonth = date.getDate();
       const firstDayOfWeek = firstDayOfMonth.getDay(); // Day of the week the month starts on
@@ -112,7 +117,7 @@ const Performance:React.FC = () => {
     };
 
     if (tasksThisMonth.length > 0) {
-      tasksThisMonth.forEach((task:TaskDetailsType) => {
+      tasksThisMonth.forEach((task: TaskDetailsType) => {
         const taskDate = new Date(task.createdOn);
         const week = getWeekOfMonth(taskDate) - 1; // Zero-based index for the week
         weeklyTasksArray[week].push(task);
@@ -148,7 +153,9 @@ const Performance:React.FC = () => {
   return (
     <>
       <div className="tasks-today text-left mt-2 m-1">
-        <h1 className="text-3xl font-bold text-center mt-[2.5rem]">Performance Review</h1>
+        <h1 className="text-3xl font-bold text-center mt-[2.5rem]">
+          Performance Review
+        </h1>
 
         <div className="data-container">
           <div className="dropdown-selectors flex justify-between w-3/4 m-auto">

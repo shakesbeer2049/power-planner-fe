@@ -2,7 +2,7 @@ import React, { useState, createContext, useEffect, useContext } from "react";
 import * as taskService from "../utils/taskService";
 import { toast } from "react-toastify";
 import useApiCaller from "../hooks/useApiCaller";
-import  { useAuth } from "./AuthContext";
+import { useAuth } from "./AuthContext";
 import { jwtDecode } from "jwt-decode";
 import { callApi } from "../utils/callApi";
 import { CustomJWTPayload } from "../types/types";
@@ -24,7 +24,6 @@ type TaskProviderProps = {
   children: React.ReactNode;
 };
 
-
 const TaskContext = createContext<TaskContextType | null>(null);
 
 export const useTask = () => {
@@ -33,7 +32,7 @@ export const useTask = () => {
     throw new Error("useTask must be used within TaskProvider");
   }
   return context;
-}
+};
 
 export const TaskProvider: React.FC<TaskProviderProps> = ({
   children,
@@ -68,7 +67,7 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
     data: taskData,
     isError: taskError,
     isLoading: tasksLoading,
-  }:APICallerType = useApiCaller(url, "GET", {});
+  }: APICallerType = useApiCaller(url, "GET", {});
 
   // Effects
   useEffect(() => {
@@ -78,13 +77,16 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
   }, [tasksLoading, taskData]);
 
   // TASK UPDATE HANDL
-  const handleTaskUpdate = async (e: { target: { checked: any; }; }, taskToUpdate: any) => {
+  const handleTaskUpdate = async (
+    e: { target: { checked: any } },
+    taskToUpdate: any
+  ) => {
     console.log("task to update", taskToUpdate);
     // Update Task
     const updatedTask = { ...taskToUpdate, isCompleted: e.target.checked };
     // Update TaskList in UI
-    const updatedList = taskList.map((task:TaskDetailsType) =>
-      task.taskId === updatedTask._id ? updatedTask : task
+    const updatedList = taskList.map((task: TaskDetailsType) =>
+      task.taskId === updatedTask.taskId ? updatedTask : task
     );
 
     // Update Task on server
@@ -110,7 +112,10 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
   };
 
   // Task Delete
-  const handleTaskDelete = async (taskToDelete: { isCompleted: any; _id: any; }) => {
+  const handleTaskDelete = async (taskToDelete: {
+    isCompleted: boolean;
+    taskId: string;
+  }) => {
     if (taskToDelete.isCompleted) {
       toast.error("Cannot delete a completed task");
       return;
@@ -119,7 +124,7 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
     if (taskRes.status === "success") {
       toast.success("Task Deleted!");
       const updatedList = taskList.filter(
-        (task) => task.taskId !== taskToDelete._id
+        (task) => task.taskId !== taskToDelete.taskId
       );
       setTaskList(updatedList);
     } else {

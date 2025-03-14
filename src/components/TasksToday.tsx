@@ -1,17 +1,15 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { getToday } from "../utils/daysAndDates";
 import "../styles/tasksToday.css";
-import DeleteTaskModal from "./DeleteTaskModal";
 import "react-toastify/dist/ReactToastify.css";
-import { TbMoodEmpty } from "react-icons/tb";
 import Task from "./Task";
 
-import TaskContext, { useTask } from "../context/TaskContext";
+import { useTask } from "../context/TaskContext";
 import { TaskDetailsType } from "../types/types";
 const TasksToday = () => {
-  const TaskContext = useTask()
+  const TaskContext = useTask();
   const { taskList, handleTaskUpdate } = TaskContext;
-  
+
   const [tasksToday, setTasksToday] = useState<{
     health: TaskDetailsType[];
     wealth: TaskDetailsType[];

@@ -1,10 +1,7 @@
-import { GiFalconMoon } from "react-icons/gi";
-import { Link } from "react-router-dom";
 import "../styles/home.css";
-import { useRef, useContext } from "react";
-import { useForm, SubmitHandler, FieldValue, FieldValues } from "react-hook-form";
+import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { callApi } from "../utils/callApi";
-import AuthContext, { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext.tsx";
 
 const SignupForm = () => {
   const AuthContext = useAuth();
@@ -19,7 +16,7 @@ const SignupForm = () => {
 
   const password = watch("password");
 
-  const handleSignup:SubmitHandler<FieldValues> = async (data) => {
+  const handleSignup: SubmitHandler<FieldValues> = async (data) => {
     const response = await callApi("/users/register", "POST", data);
     if (response.status === "success" && response.token) {
       // Storing the JWT
@@ -84,7 +81,9 @@ const SignupForm = () => {
               />
             </label>
             {errors.username && (
-              <div className="text-red-500">{String(errors.username.message)}</div>
+              <div className="text-red-500">
+                {String(errors.username.message)}
+              </div>
             )}
             <label className="input input-bordered flex items-center gap-2">
               <svg
@@ -113,7 +112,9 @@ const SignupForm = () => {
               />
             </label>
             {errors.password && (
-              <div className="text-red-500">{String(errors.password.message)}</div>
+              <div className="text-red-500">
+                {String(errors.password.message)}
+              </div>
             )}
             <label className="input input-bordered flex items-center gap-2">
               <svg
@@ -156,7 +157,7 @@ const SignupForm = () => {
         <div className="modal-action">
           <form method="dialog">
             {/* if there is a button in form, it will close the modal */}
-            <button className="btn">Close</button>
+            <button className="btn close-btn-signup">Close</button>
           </form>
         </div>
       </div>

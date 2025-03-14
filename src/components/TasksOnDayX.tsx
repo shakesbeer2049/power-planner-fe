@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
-import { getToday } from "../utils/daysAndDates";
 import "../styles/tasksToday.css";
 import { TbMoodEmpty } from "react-icons/tb";
-import { useContext } from "react";
 
-import TaskContext from "../context/TaskContext";
 import DeleteTaskModal from "./DeleteTaskModal";
 import { TaskDetailsType } from "../types/types";
 
@@ -78,8 +75,10 @@ const TasksOnDayX = ({
               />{" "}
               <h4
                 onClick={() => {
-                  const modal = document.getElementById(String(task.taskId)) as HTMLDialogElement;
-                  modal?.showModal()
+                  const modal = document.getElementById(
+                    String(task.taskId)
+                  ) as HTMLDialogElement;
+                  modal?.showModal();
                 }}
                 key={task.taskId}
                 className={task.isCompleted ? "completed" : ""}
@@ -111,8 +110,10 @@ const TasksOnDayX = ({
               />{" "}
               <h4
                 onClick={() => {
-                  const modal = document.getElementById(String(task.taskId)) as HTMLDialogElement;
-                  modal?.showModal()
+                  const modal = document.getElementById(
+                    String(task.taskId)
+                  ) as HTMLDialogElement;
+                  modal?.showModal();
                 }}
                 key={task.taskId}
                 className={task.isCompleted ? "completed" : ""}
@@ -145,8 +146,10 @@ const TasksOnDayX = ({
               />{" "}
               <h4
                 onClick={() => {
-                  const modal = document.getElementById(String(task.taskId)) as HTMLDialogElement;
-                  modal?.showModal()
+                  const modal = document.getElementById(
+                    String(task.taskId)
+                  ) as HTMLDialogElement;
+                  modal?.showModal();
                 }}
                 key={task.taskId}
                 className={task.isCompleted ? "completed" : ""}

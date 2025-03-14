@@ -15,11 +15,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "react-jsx"
   },
   "include": ["src"],
   "files": [],
   "references": [
+    // @ts-ignore -> https://github.com/nrwl/nx/issues/27292
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
   ]

@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import AuthContext, { useAuth } from "../context/AuthContext";
+import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext.tsx";
 import "../styles/userprofile.css";
 import { MdHealthAndSafety } from "react-icons/md";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
@@ -12,7 +12,7 @@ type TaskListType = {
   taskList: TaskDetailsType[];
 };
 
-const UserProfile = ({ taskList }:TaskListType) => {
+const UserProfile = ({ taskList }: TaskListType) => {
   const AuthContext = useAuth();
   const { userDetails } = AuthContext;
   const [taskCount, setTaskCount] = useState({ totalToday: 0, completed: 0 });
@@ -38,7 +38,9 @@ const UserProfile = ({ taskList }:TaskListType) => {
       <button
         className="user-details"
         onClick={() => {
-          const modal = document.getElementById("user-legend") as HTMLDialogElement
+          const modal = document.getElementById(
+            "user-legend"
+          ) as HTMLDialogElement;
           modal?.showModal();
         }}
       >

@@ -1,14 +1,9 @@
-import { useContext } from "react";
-import TaskContext, { useTask } from "../context/TaskContext";
-import * as taskService from "../utils/taskService";
+import { useTask } from "../context/TaskContext";
 
 import { DeleteTaskModalProps } from "../types/types";
 
-const DeleteTaskModal:React.FC<DeleteTaskModalProps> = ({ task }) => {
-
+const DeleteTaskModal: React.FC<DeleteTaskModalProps> = ({ task }) => {
   const context = useTask();
-
- 
 
   return (
     <>
@@ -20,7 +15,7 @@ const DeleteTaskModal:React.FC<DeleteTaskModalProps> = ({ task }) => {
             <button
               className="btn btn-error"
               onClick={() => context.handleTaskDelete(task)}
-              disabled = {task.isCompleted}
+              disabled={task.isCompleted}
             >
               Delete
             </button>
