@@ -1,0 +1,41 @@
+.login-box {
+    /* border: 5px solid red; */
+    width: fit-content;
+    margin-left: 17%;
+    margin-top: 5%;
+
+}
+
+.goals-img {
+    position: absolute;
+    top: 3%;
+    right: 9%;
+}
+
+.login-btn {
+    margin-left: 0px;
+    width: 320px;
+}
+
+.login-txt {
+    font-size: 25px;
+}
+
+@media (max-width: 768px) {
+    .goals-img {
+        display: none;
+    }
+
+    .login-box {
+        margin-left: 21%;
+        margin-top: 17%;
+    }
+
+    .login-btn {
+        width: 100%;
+    }
+
+    .login-txt {
+        font-size: 20px;
+    }
+}

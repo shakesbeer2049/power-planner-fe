@@ -50,6 +50,14 @@
     padding: 20px;
 }
 
+.home-buttons {
+    width: 150px;
+}
+
+.nav-container {
+    height: 55px;
+}
+
 @media (min-width: 768px) {
     .modal-box {
         width: 50%;

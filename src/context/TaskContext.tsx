@@ -26,6 +26,7 @@ type TaskProviderProps = {
 
 const TaskContext = createContext<TaskContextType | null>(null);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useTask = () => {
   const context = useContext(TaskContext);
   if (!context) {
@@ -49,6 +50,7 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
 
       if (jwt) {
         userId = jwtDecode<CustomJWTPayload>(jwt).id;
+        console.log("userId", userId);
         if (userId) {
           const verifyUser = await callApi("/home", "GET", {});
           if (verifyUser.status === "success") {
@@ -60,14 +62,16 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
   }, []);
 
   // Initial Task fetch
-  const url = "https://power-planner-1.onrender.com/api/v1/tasks";
-  // const testUrl = "http://localhost:3000/data";
-  // const url = "http://localhost:3003/api/v1/tasks";
+  const url =
+    import.meta.env.VITE_ENV === "development"
+      ? import.meta.env.VITE_DEV_BE_URL
+      : import.meta.env.VITE_PROD_BE_URL;
+
   const {
     data: taskData,
     isError: taskError,
     isLoading: tasksLoading,
-  }: APICallerType = useApiCaller(url, "GET", {});
+  }: APICallerType = useApiCaller(url + "/tasks/all", "GET", {});
 
   // Effects
   useEffect(() => {
@@ -82,33 +86,33 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
     taskToUpdate: any
   ) => {
     console.log("task to update", taskToUpdate);
-    // Update Task
-    const updatedTask = { ...taskToUpdate, isCompleted: e.target.checked };
-    // Update TaskList in UI
-    const updatedList = taskList.map((task: TaskDetailsType) =>
-      task.taskId === updatedTask.taskId ? updatedTask : task
-    );
+    console.log("e.target.checked", e.target.checked);
 
     // Update Task on server
-    const taskRes = await taskService.updateTask(updatedTask);
-
+    const taskRes = await taskService.updateTask(taskToUpdate);
     // If task updated
     if (taskRes.status === "success") {
+      // Update Task
+      const updatedTask = taskRes.data.task;
+      // Update TaskList in UI
+      const updatedList = taskList.map((task: TaskDetailsType) =>
+        task.taskId === updatedTask.taskId ? updatedTask : task
+      );
       // update state
       setTaskList(updatedList);
-      setUserDetails(taskRes.data.user);
-
+      // setUserDetails(taskRes.data.user);
       // If task is completed , show toast
-      if (updatedTask.isCompleted)
+      if (updatedTask.completedOn)
         toast.success("Well Done, Task Completed.", {
           autoClose: 1000,
           theme: "dark",
         });
-    } else
+    } else {
       toast.error("Error in updating task", {
         autoClose: 1000,
         theme: "dark",
       });
+    }
   };
 
   // Task Delete

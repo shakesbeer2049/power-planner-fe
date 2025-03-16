@@ -1,27 +1,28 @@
 import axios from "axios";
 import { callApi } from "./callApi";
+import { TaskDetailsType } from "../types/types";
 
 const baseUrl = `/tasks`;
 
-export const addTask = async (taskDetails) => {
+export const addTask = async (taskDetails: TaskDetailsType) => {
   try {
-    const addTaskRes = await callApi(
-      baseUrl,
-      "POST",
-      taskDetails,
-      localStorage.getItem("token")
-    );
+    const addTaskRes = await callApi(baseUrl, "POST", taskDetails);
     return addTaskRes;
-  } catch (error) {}
+  } catch (error) {
+    console.log("error in add tasks", error);
+  }
 };
 
-export const updateTask = async (updatedTaskDetails) => {
+export const updateTask = async (taskToUpdate: TaskDetailsType) => {
   try {
+    console.log("taskToUpdate", taskToUpdate);
+    // taskToUpdate.taskRepeatsOn = JSON.stringify(
+    //   taskToUpdate.taskRepeatsOn
+    // );
     const updateTaskRes = await callApi(
-      `${baseUrl}/${updatedTaskDetails._id}`,
+      `${baseUrl}/${taskToUpdate.taskId}`,
       "PUT",
-      updatedTaskDetails,
-      localStorage.getItem("token")
+      taskToUpdate
     );
 
     return updateTaskRes;
@@ -30,10 +31,10 @@ export const updateTask = async (updatedTaskDetails) => {
   }
 };
 
-export const deleteTask = async (taskDetails) => {
+export const deleteTask = async (taskDetails: TaskDetailsType) => {
   try {
     const deleteTaskRes = await callApi(
-      `${baseUrl}/${taskDetails._id}`,
+      `${baseUrl}/${taskDetails.taskId}`,
       "DELETE",
       {}
     );

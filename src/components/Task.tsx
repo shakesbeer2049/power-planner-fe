@@ -5,12 +5,19 @@ import { TaskDetailsType } from "../types/types";
 type TaskProps = {
   category: string;
   taskList: TaskDetailsType[];
-  handleTaskUpdate: (e: React.ChangeEvent<HTMLInputElement>, task:TaskDetailsType) => void;
+  handleTaskUpdate: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    task: TaskDetailsType
+  ) => void;
 };
-const Task:React.FC<TaskProps> = ({ category, taskList, handleTaskUpdate }) => {
+const Task: React.FC<TaskProps> = ({
+  category,
+  taskList,
+  handleTaskUpdate,
+}) => {
   return (
     <div className="tasks">
-      <h2 className="text-2xl font-bold mb-4 text-center">{category}</h2>
+      <h2 className="text-2xl font-bold mb-4 text-left">{category}</h2>
       <ul>
         {taskList.length > 0 ? (
           taskList.map((task) => (
@@ -18,7 +25,7 @@ const Task:React.FC<TaskProps> = ({ category, taskList, handleTaskUpdate }) => {
               <DeleteTaskModal task={task} />{" "}
               <input
                 type="checkbox"
-                checked={task.isCompleted}
+                checked={Boolean(task.completedOn)}
                 className="checkbox checkbox-accent"
                 name="task"
                 id="task"
@@ -28,11 +35,13 @@ const Task:React.FC<TaskProps> = ({ category, taskList, handleTaskUpdate }) => {
               />{" "}
               <h4
                 onClick={() => {
-                  const modal = document.getElementById(String(task.taskId)) as HTMLDialogElement
-                  modal?.showModal()
+                  const modal = document.getElementById(
+                    String(task.taskId)
+                  ) as HTMLDialogElement;
+                  modal?.showModal();
                 }}
                 key={task.taskId}
-                className={task.isCompleted ? "completed" : ""}
+                className={task.completedOn ? "completed" : ""}
               >
                 {task.taskName}
               </h4>

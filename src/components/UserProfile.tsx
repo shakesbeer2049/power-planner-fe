@@ -23,11 +23,11 @@ const UserProfile = ({ taskList }: TaskListType) => {
     const today = getToday();
     const tasksToday = [];
     let completedToday = 0;
-
+    console.log("taskList", taskList);
     for (const element of taskList) {
       if (element.taskRepeatsOn.includes(today)) {
         tasksToday.push(element);
-        if (element.isCompleted) completedToday += 1;
+        if (element.completedOn) completedToday += 1;
       }
     }
     setTaskCount({ totalToday: tasksToday.length, completed: completedToday });

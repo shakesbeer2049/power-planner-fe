@@ -1,78 +1,79 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { TaskDetailsType } from "../types/types";
-export default function useApiCaller(url:string, callType:string, body:{}) {
+
+interface UseApiCallerReturnType {
+  data: TaskDetailsType[] | null;
+  isLoading: boolean;
+  isError: Error | null;
+  refetch: () => Promise<void>;
+}
+
+export default function useApiCaller(
+  url: string,
+  callType: "GET" | "POST" | "PUT" | "DELETE",
+  body: Record<string, any> = {}
+): UseApiCallerReturnType {
   const [data, setData] = useState<TaskDetailsType[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState<Error|null>(null);
+  const [isError, setIsError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    const jwt = localStorage.getItem("token");
-    if (!jwt) throw "Unauthorized";
-    const apiCaller = async () => {
-      if (!url) {
-        setIsError(new Error("URL is required"));
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        const config = {
-          method: callType,
-          url: url || "",
-          data: body || {},
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jwt}`,
-          },
-        };
-        const response = await axios(config);
-        const data = response.data.data;
-        setData(data);
-      } catch (error) {
-        const err = error instanceof Error ? error : new Error(String(error));
-        console.log(error, "error in fetching data");
-        setIsError(err);
-        if (
-          err.message == "Request failed with status code 401" ||
-          error == "Unauthorized"
-        )
-          window.location.href = "https://power-planner-fe-rpuw.onrender.com";
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    apiCaller();
-  }, [url]);
-
-  const refetch = async () => {
+  const apiCaller = async () => {
     if (!url) {
       setIsError(new Error("URL is required"));
       setIsLoading(false);
       return;
     }
 
+    const jwt = localStorage.getItem("token");
+    if (!jwt) {
+      setIsError(new Error("Unauthorized"));
+      handleUnauthorized();
+      return;
+    }
+
     try {
-      const config = {
+      setIsLoading(true);
+
+      const config: AxiosRequestConfig = {
         method: callType,
-        url: url || "",
-        data: body || {},
+        url,
+        data: callType !== "GET" ? body : undefined,
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
         },
       };
 
       const response = await axios(config);
-      const data = response.data.data;
-      setData(data);
+      setData(response.data.data);
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error));
-      console.log(err, "error in fetching data");
+      console.error(err, "Error in fetching data");
       setIsError(err);
+
+      if (err.message.includes("401") || err.message === "Unauthorized") {
+        handleUnauthorized();
+      }
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleUnauthorized = () => {
+    window.location.href =
+      import.meta.env.VITE_ENV === "development"
+        ? import.meta.env.VITE_DEV_FE_URL
+        : import.meta.env.VITE_PROD_FE_URL;
+  };
+
+  useEffect(() => {
+    apiCaller();
+  }, [url, callType, JSON.stringify(body)]);
+
+  const refetch = async () => {
+    setIsLoading(true);
+    await apiCaller();
   };
 
   return { data, isLoading, isError, refetch };

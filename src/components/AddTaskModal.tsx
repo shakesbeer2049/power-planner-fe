@@ -1,25 +1,21 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { CSSObject } from "@emotion/react";
-import { v4 as uuidv4 } from "uuid";
 import Select, { MultiValue } from "react-select";
 import { getDaysLeft } from "../utils/daysAndDates";
 import * as taskService from "../utils/taskService";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import TaskContext from "../context/TaskContext";
+import { useTask } from "../context/TaskContext";
 import { useAuth } from "../context/AuthContext.tsx";
 // import MultiSelect from "./MultiSelect";
 
 import { TaskDetailsType } from "../types/types";
 
 const AddTaskModal = () => {
-  const taskContext = useContext(TaskContext);
-  if (!taskContext) {
-    throw new Error("TaskContext not found");
-  }
+  const taskContext = useTask();
   const { taskList, setTaskList } = taskContext;
-  const context = useAuth();
-  const { userDetails } = context;
+  const AuthContext = useAuth();
+  const { userDetails } = AuthContext;
 
   const [taskDetails, setTaskDetails] = useState<TaskDetailsType>({
     taskId: "",
@@ -27,14 +23,16 @@ const AddTaskModal = () => {
     taskRepeatsOn: [],
     taskCategory: "",
     relatedUserId: "",
-    isCompleted: false,
     createdOn: "",
+    completedOn: "",
   });
 
   //handle task input
   const handleTaskInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTaskDetails({ ...taskDetails, taskName: e.target.value });
   };
+
+  console.log(userDetails, "userDetails");
 
   // Add Task Handler
   const addTaskHandler = async () => {
@@ -44,8 +42,7 @@ const AddTaskModal = () => {
       taskName: taskDetails.taskName,
       taskCategory: taskDetails.taskCategory,
       taskRepeatsOn: taskDetails.taskRepeatsOn,
-      isCompleted: false,
-      relatedUserId: userDetails?._id,
+      relatedUserId: userDetails?.userId,
     };
 
     // validate fields
@@ -58,22 +55,11 @@ const AddTaskModal = () => {
       formValid = false;
 
     if (formValid) {
-      const taskArray = [];
-      if (taskObj.taskRepeatsOn.length > 0) {
-        for (const element of taskObj.taskRepeatsOn) {
-          taskArray.push({
-            ...taskObj,
-            taskRepeatsOn: element,
-            _id: uuidv4(),
-          });
-        }
-      }
-      const res = await taskService.addTask(taskArray);
+      const res = await taskService.addTask(taskObj);
 
       if (res.status === "success") {
-        taskObj.taskId = res.data.taskId;
-        const newTaskList = [...taskList, ...taskArray];
-        setTaskList(newTaskList);
+        const insertedTask = res.data.task;
+        setTaskList([...taskList, insertedTask]);
         setTaskDetails({ ...taskDetails, taskName: "" });
         toast.success("Task Added.", {
           autoClose: 1000,

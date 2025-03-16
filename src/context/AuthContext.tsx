@@ -38,7 +38,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = (props) => {
   // Logout function
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.location.href = "https://power-planner-fe-rpuw.onrender.com";
+    window.location.href =
+      import.meta.env.VITE_ENV === "development"
+        ? import.meta.env.VITE_DEV_FE_URL
+        : import.meta.env.VITE_PROD_FE_URL;
   };
 
   return (

@@ -2,8 +2,10 @@ import axios from "axios";
 
 export const callApi = async (url, method, body) => {
   const jwt = localStorage.getItem("token");
-  const baseURL = "http://localhost:3003/api/v1";
-  // const baseURL = "https://power-planner-1.onrender.com/api/v1";
+  const baseURL =
+    import.meta.env.VITE_ENV === "development"
+      ? import.meta.env.VITE_DEV_BE_URL
+      : import.meta.env.VITE_PROD_BE_URL;
   if (!url) {
     throw new Error("URL is required");
   }
@@ -15,7 +17,7 @@ export const callApi = async (url, method, body) => {
       data: body || {},
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${jwt}` || "",
+        Authorization: jwt ? `Bearer ${jwt}` : "",
       },
     };
     // console.log("axios config", config);

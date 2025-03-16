@@ -1,9 +1,14 @@
 import "../styles/home.css";
+import "../styles/register.css";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { callApi } from "../utils/callApi";
 import { useAuth } from "../context/AuthContext.tsx";
+import Navbar from "./Navbar";
+import { isMobile } from "react-device-detect";
+import { useNavigate } from "react-router-dom";
 
 const SignupForm = () => {
+  const navigate = useNavigate();
   const AuthContext = useAuth();
   const { setUserDetails } = AuthContext;
   const emailRegex = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
@@ -24,13 +29,15 @@ const SignupForm = () => {
 
       const userDeets = { ...response.data.user, loggedIn: true };
       setUserDetails(userDeets);
+      navigate("/tasks/daily");
     }
   };
 
   return (
-    <dialog id="sign-up-modal" className="modal modal-middle ">
-      <div className="modal-box">
-        <h3 className="font-bold text-lg">Sign Up</h3>
+    <>
+      <Navbar />
+      <div className="register-container">
+        <h3 className="font-bold text-lg text-center register-txt">Sign Up</h3>
         <div className="signup-details">
           <form onSubmit={handleSubmit(handleSignup)}>
             <label className="input input-bordered flex items-center gap-2">
@@ -146,22 +153,21 @@ const SignupForm = () => {
               </div>
             )}
             <button
-              className="btn btn-success signup-btn"
+              className="btn btn-success register-btn mt-4"
               type="submit"
               disabled={isSubmitting}
             >
               {isSubmitting ? "....." : "Sign Up"}
             </button>
           </form>
-        </div>
-        <div className="modal-action">
-          <form method="dialog">
-            {/* if there is a button in form, it will close the modal */}
-            <button className="btn close-btn-signup">Close</button>
-          </form>
+          {!isMobile && (
+            <div className="ambition-img">
+              <img src="dist/images/ambition.avif" alt="goals" />
+            </div>
+          )}
         </div>
       </div>
-    </dialog>
+    </>
   );
 };
 

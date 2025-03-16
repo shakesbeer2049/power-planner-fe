@@ -9,12 +9,16 @@ import Performance from "./components/Performance";
 import { TaskProvider } from "./context/TaskContext";
 import Home from "./components/Home";
 import { AuthProvider } from "./context/AuthContext";
+import LoginForm from "./components/LoginForm";
+import SignupForm from "./components/RegisterForm";
 
 const App: React.FC = () => {
   const [selectedMenu, setSelectedMenu] = useState<string>("daily");
 
   const router = createBrowserRouter([
     { path: "/", element: <Home /> },
+    { path: "/login", element: <LoginForm /> },
+    { path: "/register", element: <SignupForm /> },
     {
       path: "/tasks",
       element: (
