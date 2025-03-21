@@ -15,10 +15,6 @@ export const addTask = async (taskDetails: TaskDetailsType) => {
 
 export const updateTask = async (taskToUpdate: TaskDetailsType) => {
   try {
-    console.log("taskToUpdate", taskToUpdate);
-    // taskToUpdate.taskRepeatsOn = JSON.stringify(
-    //   taskToUpdate.taskRepeatsOn
-    // );
     const updateTaskRes = await callApi(
       `${baseUrl}/${taskToUpdate.taskId}`,
       "PUT",
@@ -36,7 +32,7 @@ export const deleteTask = async (taskDetails: TaskDetailsType) => {
     const deleteTaskRes = await callApi(
       `${baseUrl}/${taskDetails.taskId}`,
       "DELETE",
-      {}
+      taskDetails
     );
     return deleteTaskRes;
   } catch (error) {

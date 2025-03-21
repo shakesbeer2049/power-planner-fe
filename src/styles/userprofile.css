@@ -13,13 +13,15 @@
     display: flex;
     justify-content: space-between;
     /* width: 33%; */
-    color: orangered;
+    color: black;
 }
 
 .points {
+    margin-top: 25%;
     font-weight: 900;
     font-size: 21px;
     /* border: 1px solid red; */
+    width: 250px;
 }
 
 .right-profile {

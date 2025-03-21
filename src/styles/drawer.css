@@ -1,25 +1,6 @@
-
-.add-task-modal {
-    margin-left: 20%;
+.drawer-add-task {
+    margin-bottom: 45%;
     width: 121%;
-    height: 45vh;
-    animation: slideDown 0.5s ease-out forwards;
-    /* Animation applied here */
-    transform: translateY(-100%);
-
-}
-
-/* Slide down animation */
-@keyframes slideDown {
-    0% {
-        transform: translateY(-100%);
-        /* Starts off-screen */
-    }
-
-    100% {
-        transform: translateY(0);
-        /* Ends in normal position */
-    }
 }
 
 #add-task-input {
@@ -102,14 +83,38 @@
         top: 3px;
     }
 
-    .drawer {
-        /* margin-top: -5%; */
-        width: fit-content;
-    }
-
     .add-task-modal {
         position: absolute;
     }
+
+    .drawer-container {
+        width: fit-content;
+    }
+
+    .outlet-container {
+        width: -webkit-fill-available;
+
+    }
+
+    .add-task-form-container {
+        width: fit-content;
+    }
+
+    .add-task-form-container:hover {
+        cursor: pointer;
+
+    }
+
+    .add-task-form-container button:hover {
+        cursor: pointer;
+    }
+
+    .task-form-container {
+        width: fit-content;
+    }
+
+
+
 
 
 

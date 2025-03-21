@@ -50,7 +50,6 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
 
       if (jwt) {
         userId = jwtDecode<CustomJWTPayload>(jwt).id;
-        console.log("userId", userId);
         if (userId) {
           const verifyUser = await callApi("/home", "GET", {});
           if (verifyUser.status === "success") {
@@ -71,7 +70,7 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
     data: taskData,
     isError: taskError,
     isLoading: tasksLoading,
-  }: APICallerType = useApiCaller(url + "/tasks/all", "GET", {});
+  }: APICallerType = useApiCaller(url + "/tasks", "GET", {});
 
   // Effects
   useEffect(() => {
@@ -82,32 +81,39 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
 
   // TASK UPDATE HANDL
   const handleTaskUpdate = async (
-    e: { target: { checked: any } },
-    taskToUpdate: any
+    taskToUpdate: TaskDetailsType,
+    sourceTaskList: TaskDetailsType[]
   ) => {
-    console.log("task to update", taskToUpdate);
-    console.log("e.target.checked", e.target.checked);
-
-    // Update Task on server
-    const taskRes = await taskService.updateTask(taskToUpdate);
-    // If task updated
-    if (taskRes.status === "success") {
-      // Update Task
-      const updatedTask = taskRes.data.task;
-      // Update TaskList in UI
-      const updatedList = taskList.map((task: TaskDetailsType) =>
-        task.taskId === updatedTask.taskId ? updatedTask : task
-      );
-      // update state
-      setTaskList(updatedList);
-      // setUserDetails(taskRes.data.user);
-      // If task is completed , show toast
-      if (updatedTask.completedOn)
-        toast.success("Well Done, Task Completed.", {
+    try {
+      console.log("sourceTaskList", sourceTaskList);
+      // Update Task on server
+      const taskRes = await taskService.updateTask(taskToUpdate);
+      // If task updated
+      if (taskRes.status === "success") {
+        // Update Task
+        const updatedTask = taskRes.data.task;
+        // Update TaskList in UI
+        const updatedList = sourceTaskList.map((task: TaskDetailsType) =>
+          task.taskId === updatedTask.taskId ? updatedTask : task
+        );
+        console.log(updatedList, "updatedList");
+        // update state
+        setTaskList(updatedList);
+        // setUserDetails(taskRes.data.user);
+        // If task is completed , show toast
+        if (updatedTask.completedOn)
+          toast.success("Well Done, Task Completed.", {
+            autoClose: 1000,
+            theme: "dark",
+          });
+      } else {
+        toast.error("Error in updating task", {
           autoClose: 1000,
           theme: "dark",
         });
-    } else {
+      }
+    } catch (error) {
+      console.log("error in updating task", error);
       toast.error("Error in updating task", {
         autoClose: 1000,
         theme: "dark",
@@ -116,11 +122,8 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
   };
 
   // Task Delete
-  const handleTaskDelete = async (taskToDelete: {
-    isCompleted: boolean;
-    taskId: string;
-  }) => {
-    if (taskToDelete.isCompleted) {
+  const handleTaskDelete = async (taskToDelete: TaskDetailsType) => {
+    if (taskToDelete.completedOn) {
       toast.error("Cannot delete a completed task");
       return;
     }

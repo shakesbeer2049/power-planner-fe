@@ -2,19 +2,16 @@ import DeleteTaskModal from "./DeleteTaskModal";
 import { TbMoodEmpty } from "react-icons/tb";
 import "../styles/Task.css";
 import { TaskDetailsType } from "../types/types";
+import { useTask } from "../context/TaskContext";
+
 type TaskProps = {
   category: string;
   taskList: TaskDetailsType[];
-  handleTaskUpdate: (
-    e: React.ChangeEvent<HTMLInputElement>,
-    task: TaskDetailsType
-  ) => void;
+  allTasks: TaskDetailsType[];
 };
-const Task: React.FC<TaskProps> = ({
-  category,
-  taskList,
-  handleTaskUpdate,
-}) => {
+const Task: React.FC<TaskProps> = ({ allTasks, category, taskList }) => {
+  const TaskContext = useTask();
+  const { handleTaskUpdate } = TaskContext;
   return (
     <div className="tasks">
       <h2 className="text-2xl font-bold mb-4 text-left">{category}</h2>
@@ -29,8 +26,8 @@ const Task: React.FC<TaskProps> = ({
                 className="checkbox checkbox-accent"
                 name="task"
                 id="task"
-                onChange={(e) => {
-                  handleTaskUpdate(e, task);
+                onChange={() => {
+                  handleTaskUpdate(task, allTasks);
                 }}
               />{" "}
               <h4
@@ -41,7 +38,12 @@ const Task: React.FC<TaskProps> = ({
                   modal?.showModal();
                 }}
                 key={task.taskId}
-                className={task.completedOn ? "completed" : ""}
+                className={
+                  task.completedOn &&
+                  task.scheduledOn.includes(String(new Date()))
+                    ? "completed"
+                    : ""
+                }
               >
                 {task.taskName}
               </h4>

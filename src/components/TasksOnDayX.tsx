@@ -1,23 +1,16 @@
 import { useEffect, useState } from "react";
 import "../styles/tasksToday.css";
 import { TbMoodEmpty } from "react-icons/tb";
-
+import handleTaskUpdate from "../context/TaskContext";
 import DeleteTaskModal from "./DeleteTaskModal";
 import { TaskDetailsType } from "../types/types";
 
 type TasksOnDayXProps = {
-  handleTaskUpdate: (
-    e: React.ChangeEvent<HTMLInputElement>,
-    task: TaskDetailsType
-  ) => void;
   taskList: TaskDetailsType[];
   weekDay: string;
 };
-const TasksOnDayX = ({
-  handleTaskUpdate,
-  taskList,
-  weekDay,
-}: TasksOnDayXProps) => {
+
+const TasksOnDayX = ({ taskList, weekDay }: TasksOnDayXProps) => {
   const [tasksToday, setTasksToday] = useState<{
     health: TaskDetailsType[];
     wealth: TaskDetailsType[];
@@ -55,11 +48,11 @@ const TasksOnDayX = ({
 
   return (
     <div className="tasks-today text-left mt-16 ml-8 lg:mt-0">
-      <h1 className="text-5xl font-bold text-center mb-16 mt-16 text-teal-800">
+      <h1 className="text-5xl font-bold text-left mb-16 mt-16 text-teal-800 text-left">
         {weekDay}
       </h1>
 
-      <h2 className="text-2xl font-bold mb-4 mt-4 text-center">Health</h2>
+      <h2 className="text-2xl font-bold mb-4 mt-4 text-left">Health</h2>
       <div className="tasks">
         {tasksToday.health?.length > 0 ? (
           tasksToday.health.map((task) => (
@@ -70,7 +63,7 @@ const TasksOnDayX = ({
                 className="checkbox checkbox-accent"
                 name="task"
                 id="task"
-                checked={task.isCompleted}
+                checked={Boolean(task.completedOn)}
                 onChange={(e) => handleTaskUpdate(e, task)}
               />{" "}
               <h4
@@ -81,20 +74,20 @@ const TasksOnDayX = ({
                   modal?.showModal();
                 }}
                 key={task.taskId}
-                className={task.isCompleted ? "completed" : ""}
+                className={task.completedOn ? "completed" : ""}
               >
                 {task.taskName}
               </h4>
             </div>
           ))
         ) : (
-          <span className="text-center">
+          <span className="text-left">
             {" "}
             <TbMoodEmpty className="inline" /> So Empty!{" "}
           </span>
         )}
       </div>
-      <h2 className="text-2xl font-bold mb-4 mt-4 text-center">Knowledge</h2>
+      <h2 className="text-2xl font-bold mb-4 mt-4 text-left">Knowledge</h2>
       <div className="tasks">
         {tasksToday.wealth?.length > 0 ? (
           tasksToday.wealth.map((task) => (
@@ -105,7 +98,7 @@ const TasksOnDayX = ({
                 type="checkbox"
                 name="task"
                 id="task"
-                checked={task.isCompleted}
+                checked={Boolean(task.completedOn)}
                 onChange={(e) => handleTaskUpdate(e, task)}
               />{" "}
               <h4
@@ -116,21 +109,21 @@ const TasksOnDayX = ({
                   modal?.showModal();
                 }}
                 key={task.taskId}
-                className={task.isCompleted ? "completed" : ""}
+                className={task.completedOn ? "completed" : ""}
               >
                 {task.taskName}
               </h4>
             </div>
           ))
         ) : (
-          <span className="text-center">
+          <span className="text-left">
             {" "}
             <TbMoodEmpty className="inline" /> So Empty!{" "}
           </span>
         )}
       </div>
 
-      <h2 className="text-2xl font-bold mb-4 mt-4 text-center">Wealth</h2>
+      <h2 className="text-2xl font-bold mb-4 mt-4 text-left">Wealth</h2>
       <div className="tasks">
         {tasksToday.knowledge?.length > 0 ? (
           tasksToday.knowledge.map((task) => (
@@ -138,7 +131,7 @@ const TasksOnDayX = ({
               <DeleteTaskModal task={task} />{" "}
               <input
                 type="checkbox"
-                checked={task.isCompleted}
+                checked={Boolean(task.completedOn)}
                 onChange={(e) => handleTaskUpdate(e, task)}
                 name="task"
                 id="task"
@@ -152,14 +145,14 @@ const TasksOnDayX = ({
                   modal?.showModal();
                 }}
                 key={task.taskId}
-                className={task.isCompleted ? "completed" : ""}
+                className={task.completedOn ? "completed" : ""}
               >
                 {task.taskName}
               </h4>
             </div>
           ))
         ) : (
-          <span className="text-center">
+          <span className="text-left">
             {" "}
             <TbMoodEmpty className="inline" /> So Empty!{" "}
           </span>

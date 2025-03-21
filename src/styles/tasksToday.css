@@ -13,6 +13,8 @@
 
 }
 
+.add-task-form-container {}
+
 
 @media (min-width:800px) {
     .tasks {
@@ -20,6 +22,6 @@
         display: flex;
         align-content: center;
         flex-direction: column;
-        align-items: center;
+        /* align-items: center; */
     }
 }

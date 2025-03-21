@@ -1,17 +1,16 @@
 import "../styles/drawer.css";
-import { AiOutlineMenu } from "react-icons/ai";
-import AddTaskModal from "./AddTaskModal";
-import XPBar from "./UserProfile";
-import { Link, Outlet } from "react-router-dom";
-import { useState } from "react";
-import { HiChevronDoubleUp } from "react-icons/hi";
 import { useAuth } from "../context/AuthContext.tsx";
-import { useTask } from "../context/TaskContext";
 import { DrawerProps } from "../types/types";
+import AddTask from "./AddTask.tsx";
+import UserProfile from "./UserProfile";
+import { useState } from "react";
+import { AiOutlineMenu } from "react-icons/ai";
+import { HiChevronDoubleUp } from "react-icons/hi";
+import { Link, Outlet } from "react-router-dom";
 
 const Drawer: React.FC<DrawerProps> = ({ selectedMenu, setSelectedMenu }) => {
   const [drawerState, setDrawerState] = useState(false);
-  const TaskContext = useTask();
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const AuthContext = useAuth();
 
   return (
@@ -37,7 +36,10 @@ const Drawer: React.FC<DrawerProps> = ({ selectedMenu, setSelectedMenu }) => {
               <AiOutlineMenu />
             </label>
             {/* XP BAR */}
-            <XPBar taskList={TaskContext.taskList} />
+            <UserProfile
+              isProfileOpen={isProfileOpen}
+              setIsProfileOpen={setIsProfileOpen}
+            />
           </div>
         </div>
 
@@ -59,23 +61,12 @@ const Drawer: React.FC<DrawerProps> = ({ selectedMenu, setSelectedMenu }) => {
                 <Link to="/"> LevelUP</Link>{" "}
               </h1>
             </div>
+            {/* Open the modal using document.getElementById('ID').showModal() method */}
+
             <li>
-              {/* Open the modal using document.getElementById('ID').showModal() method */}
-              <button
-                className="btn btn-primary mb-1"
-                onClick={() => {
-                  const modal = document.getElementById(
-                    "add_task_modal"
-                  ) as HTMLDialogElement;
-                  modal?.showModal(); // Use optional chaining to avoid null errors
-                }}
-              >
-                Add Task
-              </button>
-              <dialog id="add_task_modal" className="modal lg:mb-8">
-                <AddTaskModal />
-              </dialog>
+              <AddTask isModal={true} />
             </li>
+
             <li
               onClick={() => {
                 setSelectedMenu("daily");
@@ -119,7 +110,7 @@ const Drawer: React.FC<DrawerProps> = ({ selectedMenu, setSelectedMenu }) => {
           </ul>
         </div>
       </div>
-      <div className="outlet w-full">
+      <div className="outlet outlet-container">
         <Outlet />
       </div>
     </div>

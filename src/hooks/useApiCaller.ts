@@ -1,13 +1,7 @@
 import { useEffect, useState } from "react";
 import axios, { AxiosRequestConfig } from "axios";
 import { TaskDetailsType } from "../types/types";
-
-interface UseApiCallerReturnType {
-  data: TaskDetailsType[] | null;
-  isLoading: boolean;
-  isError: Error | null;
-  refetch: () => Promise<void>;
-}
+import { UseApiCallerReturnType } from "../types/types";
 
 export default function useApiCaller(
   url: string,

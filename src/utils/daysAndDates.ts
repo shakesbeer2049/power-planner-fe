@@ -19,13 +19,13 @@ export const isDateInCurrentWeek = (date) => {
 
 export const getDaysLeft = () => {
   const weekDays = [
-    { value: "Monday", label: "Mon" },
-    { value: "Tuesday", label: "Tue" },
-    { value: "Wednesday", label: "Wed" },
-    { value: "Thursday", label: "Thu" },
-    { value: "Friday", label: "Fri" },
-    { value: "Saturday", label: "Sat" },
-    { value: "Sunday", label: "Sun" },
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
   ];
 
   return weekDays.slice(new Date().getDay() - 1);

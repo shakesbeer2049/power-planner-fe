@@ -1,4 +1,5 @@
 export type TaskDetailsType = {
+  scheduledOn: string;
   completedOn: string | Date;
   taskId?: string;
   taskName: string;
@@ -19,4 +20,11 @@ export type DrawerProps = {
 
 export type CustomJWTPayload = {
   id: string;
+};
+
+export type UseApiCallerReturnType = {
+  data: TaskDetailsType[] | null;
+  isLoading: boolean;
+  isError: Error | null;
+  refetch: () => Promise<void>;
 };
