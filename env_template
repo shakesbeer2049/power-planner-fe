@@ -1,0 +1,5 @@
+VITE_DEV_BE_URL = 
+VITE_DEV_FE_URL = 
+VITE_PROD_BE_URL = 
+VITE_PROD_FE_URL = 
+VITE_ENV = development

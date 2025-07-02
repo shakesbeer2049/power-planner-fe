@@ -40,6 +40,7 @@ export default function useApiCaller(
       };
 
       const response = await axios(config);
+      // console.log("response in useApiCaller", response.data);
       setData(response.data.data);
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error));

@@ -4,14 +4,21 @@ import { TbMoodEmpty } from "react-icons/tb";
 import handleTaskUpdate from "../context/TaskContext";
 import DeleteTaskModal from "./DeleteTaskModal";
 import { TaskDetailsType } from "../types/types";
+import Task from "./Task";
 
 type TasksOnDayXProps = {
   taskList: TaskDetailsType[];
   weekDay: string;
+  dateOnThisDay: Date;
 };
 
-const TasksOnDayX = ({ taskList, weekDay }: TasksOnDayXProps) => {
-  const [tasksToday, setTasksToday] = useState<{
+const TasksOnDayX = ({
+  taskList,
+  weekDay,
+  dateOnThisDay,
+}: TasksOnDayXProps) => {
+  console.log("date", dateOnThisDay);
+  const [tasksOnThisDay, setTasksOnThisDay] = useState<{
     health: TaskDetailsType[];
     wealth: TaskDetailsType[];
     knowledge: TaskDetailsType[];
@@ -20,22 +27,26 @@ const TasksOnDayX = ({ taskList, weekDay }: TasksOnDayXProps) => {
     wealth: [],
     knowledge: [],
   });
-
+  /**
+   * Filters tasks that repeat on the given weekDay and
+   * separates them by category, then updates the state
+   * with the new lists of tasks.
+   */
   const makeTaskList = () => {
-    const tasksToday = taskList.filter((task) =>
+    const tasksOnThisDay = taskList.filter((task) =>
       task?.taskRepeatsOn?.includes(weekDay)
     );
-    const healthTasks = tasksToday.filter(
+    console.log("tasksOnThisDay", tasksOnThisDay);
+    const healthTasks = tasksOnThisDay.filter(
       (task) => task?.taskCategory == "health"
     );
-    const wealthTasks = tasksToday.filter(
+    const wealthTasks = tasksOnThisDay.filter(
       (task) => task?.taskCategory == "wealth"
     );
-    const knowledgeTasks = tasksToday.filter(
+    const knowledgeTasks = tasksOnThisDay.filter(
       (task) => task?.taskCategory == "knowledge"
     );
-
-    setTasksToday({
+    setTasksOnThisDay({
       health: healthTasks,
       wealth: wealthTasks,
       knowledge: knowledgeTasks,
@@ -48,49 +59,22 @@ const TasksOnDayX = ({ taskList, weekDay }: TasksOnDayXProps) => {
 
   return (
     <div className="tasks-today text-left mt-16 ml-8 lg:mt-0">
-      <h1 className="text-5xl font-bold text-left mb-16 mt-16 text-teal-800 text-left">
+      <h1 className="text-5xl font-bold mb-16 mt-16 text-teal-800 text-left">
         {weekDay}
       </h1>
 
       <h2 className="text-2xl font-bold mb-4 mt-4 text-left">Health</h2>
       <div className="tasks">
-        {tasksToday.health?.length > 0 ? (
-          tasksToday.health.map((task) => (
-            <div className="task-h1-input" key={task.taskId}>
-              <DeleteTaskModal task={task} />{" "}
-              <input
-                type="checkbox"
-                className="checkbox checkbox-accent"
-                name="task"
-                id="task"
-                checked={Boolean(task.completedOn)}
-                onChange={(e) => handleTaskUpdate(e, task)}
-              />{" "}
-              <h4
-                onClick={() => {
-                  const modal = document.getElementById(
-                    String(task.taskId)
-                  ) as HTMLDialogElement;
-                  modal?.showModal();
-                }}
-                key={task.taskId}
-                className={task.completedOn ? "completed" : ""}
-              >
-                {task.taskName}
-              </h4>
-            </div>
-          ))
-        ) : (
-          <span className="text-left">
-            {" "}
-            <TbMoodEmpty className="inline" /> So Empty!{" "}
-          </span>
-        )}
+        <Task
+          taskList={tasksOnThisDay.health}
+          category="Health"
+          allTasks={taskList}
+        />
       </div>
       <h2 className="text-2xl font-bold mb-4 mt-4 text-left">Knowledge</h2>
       <div className="tasks">
-        {tasksToday.wealth?.length > 0 ? (
-          tasksToday.wealth.map((task) => (
+        {tasksOnThisDay.wealth?.length > 0 ? (
+          tasksOnThisDay.wealth.map((task) => (
             <div className="task-h1-input" key={task.taskId}>
               <DeleteTaskModal task={task} />{" "}
               <input
@@ -125,8 +109,8 @@ const TasksOnDayX = ({ taskList, weekDay }: TasksOnDayXProps) => {
 
       <h2 className="text-2xl font-bold mb-4 mt-4 text-left">Wealth</h2>
       <div className="tasks">
-        {tasksToday.knowledge?.length > 0 ? (
-          tasksToday.knowledge.map((task) => (
+        {tasksOnThisDay.knowledge?.length > 0 ? (
+          tasksOnThisDay.knowledge.map((task) => (
             <div className="task-h1-input" key={task.taskId}>
               <DeleteTaskModal task={task} />{" "}
               <input

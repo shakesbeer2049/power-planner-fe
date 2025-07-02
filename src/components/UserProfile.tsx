@@ -1,4 +1,4 @@
-import { useAuth } from "../context/AuthContext.tsx";
+import { useAuth } from "../context/AuthContext.js";
 import { useEffect, useState } from "react";
 import "../styles/userprofile.css";
 import { CiCircleInfo } from "react-icons/ci";
@@ -7,7 +7,7 @@ import { IoClose } from "react-icons/io5";
 import { MdHealthAndSafety } from "react-icons/md";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import { SiExpo } from "react-icons/si";
-import { useTask } from "../context/TaskContext";
+import { useTask } from "../context/TaskContext.js";
 
 type TaskListType = {
   isProfileOpen: boolean;
@@ -21,21 +21,26 @@ const UserProfile = ({ isProfileOpen, setIsProfileOpen }: TaskListType) => {
   const [hoverXP, setHoverXP] = useState(false);
   const [hoverTasks, setHoverTasks] = useState(false);
   const TaskContext = useTask();
-
+  console.log("taskList", TaskContext.taskList);
+  // Calculate today's tasks
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     const tasksToday = [];
     let completedToday = 0;
 
-    console.log("taskList", TaskContext.taskList);
-
+    //today progress bar
     for (const element of TaskContext.taskList) {
-      if (element.scheduledOn === today) {
+      if (element.scheduledOn.includes(today)) {
+        console.log(element.scheduledOn, today);
         // Compare the scheduled date
         tasksToday.push(element);
-        if (element.completedOn) completedToday += 1;
+        if (element.completedOn) {
+          completedToday += 1;
+        }
       }
     }
+    console.log(completedToday, "completedToday");
+    console.log(tasksToday, "tasksToday");
     setTaskCount({ totalToday: tasksToday.length, completed: completedToday });
   }, [TaskContext.taskList]);
 
@@ -69,7 +74,7 @@ const UserProfile = ({ isProfileOpen, setIsProfileOpen }: TaskListType) => {
           <progress
             className="progress progress-success w-24"
             value={userDetails?.xp || 0}
-            max={userDetails?.nextXP || 0}
+            max={userDetails?.nextXp || 0}
           ></progress>
           <br />
           <CiCircleInfo
@@ -122,7 +127,7 @@ const UserProfile = ({ isProfileOpen, setIsProfileOpen }: TaskListType) => {
                 <div className="lvl-rank">
                   <span> {userDetails?.username || "Robot"}</span>
                   <br />
-                  <span> {userDetails?.rank || "Recruit"}</span> |{" "}
+                  <span> {userDetails?.ranked || "Recruit"}</span> |{" "}
                   <span> Level {userDetails?.lvl || 0}</span>
                 </div>
               </div>

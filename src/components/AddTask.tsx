@@ -20,7 +20,6 @@ const AddTask: React.FC<AddTaskProps> = ({ isModal }) => {
   const { taskList, setTaskList } = taskContext;
   const AuthContext = useAuth();
   const { userDetails } = AuthContext;
-  // console.log("userDetails", userDetails);
 
   const [taskDetails, setTaskDetails] = useState<TaskDetailsType>({
     taskId: "",
@@ -52,6 +51,19 @@ const AddTask: React.FC<AddTaskProps> = ({ isModal }) => {
       completedOn: "",
       scheduledOn: "",
     };
+
+    if (!taskObj.relatedUserId) {
+      toast.warning(
+        "You are not logged in! Try reloading the page if the issue persists.",
+        {
+          autoClose: 1000,
+          theme: "dark",
+          pauseOnFocusLoss: false,
+          closeOnClick: true,
+        }
+      );
+      return;
+    }
 
     // validate fields
     let formValid = true;
@@ -108,13 +120,14 @@ const AddTask: React.FC<AddTaskProps> = ({ isModal }) => {
 
   const formContent = (
     <motion.form
-      initial={{ opacity: 0, x: 0, y: 0 }}
-      animate={isModal ? {} : { opacity: 1, x: "-5%", y: "-100%" }}
-      transition={{ duration: 0.5 }}
-      className="space-y-4 form-data bg-white"
+      // initial={{ opacity: 0, x: 0, y: 0 }}
+      // animate={isModal ? {} : { opacity: 1, x: "-5%", y: "-100%" }}
+      // transition={{ duration: 0.5 }}
+      className="space-y-4 form-data-main bg-white"
       onSubmit={addTaskHandler}
     >
       <input
+        id="task-name"
         type="text"
         value={taskDetails.taskName}
         onChange={handleTaskInput}

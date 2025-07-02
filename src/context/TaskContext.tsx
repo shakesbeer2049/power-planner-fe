@@ -40,7 +40,7 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
 }): React.ReactElement => {
   const [taskList, setTaskList] = useState<TaskDetailsType[]>([]);
   const AuthContext = useAuth();
-  const { setUserDetails } = AuthContext;
+  const { setUserDetails, userDetails } = AuthContext;
 
   // Initial user details fetch
   useEffect(() => {
@@ -92,14 +92,17 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
       if (taskRes.status === "success") {
         // Update Task
         const updatedTask = taskRes.data.task;
+        const today = new Date().toISOString().split("T")[0];
         // Update TaskList in UI
         const updatedList = sourceTaskList.map((task: TaskDetailsType) =>
-          task.taskId === updatedTask.taskId ? updatedTask : task
+          task.taskId === updatedTask.taskId && task.scheduledOn.includes(today)
+            ? updatedTask
+            : task
         );
         console.log(updatedList, "updatedList");
         // update state
         setTaskList(updatedList);
-        // setUserDetails(taskRes.data.user);
+        setUserDetails(taskRes.data.user);
         // If task is completed , show toast
         if (updatedTask.completedOn)
           toast.success("Well Done, Task Completed.", {

@@ -1,6 +1,6 @@
 export type TaskDetailsType = {
   scheduledOn: string;
-  completedOn: string | Date;
+  completedOn: string;
   taskId?: string;
   taskName: string;
   taskRepeatsOn: string[];

@@ -1,4 +1,11 @@
+.day-name {
+    background: #0f2027ce;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #2c53649f, #203a439f, #0f20279d);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #2c5364cc, #203a43b9, #0f20277c);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: whitesmoke;
+    font-size: 18px;
 
-
-
-
+}

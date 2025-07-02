@@ -11,6 +11,8 @@ import Home from "./components/Home";
 import { AuthProvider } from "./context/AuthContext";
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/RegisterForm";
+import Leaderboards from "./components/Leaderboards";
+import GlobalChat from "./components/GlobalChat";
 
 const App: React.FC = () => {
   const [selectedMenu, setSelectedMenu] = useState<string>("daily");
@@ -45,6 +47,14 @@ const App: React.FC = () => {
         {
           path: "performance",
           element: <Performance />,
+        },
+        {
+          path: "leaderboards",
+          element: <Leaderboards />,
+        },
+        {
+          path: "global-chat",
+          element: <GlobalChat />,
         },
       ],
     },

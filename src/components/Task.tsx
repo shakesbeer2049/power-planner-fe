@@ -3,15 +3,36 @@ import { TbMoodEmpty } from "react-icons/tb";
 import "../styles/Task.css";
 import { TaskDetailsType } from "../types/types";
 import { useTask } from "../context/TaskContext";
+import { toast } from "react-toastify";
+import { format } from "date-fns";
 
 type TaskProps = {
   category: string;
   taskList: TaskDetailsType[];
   allTasks: TaskDetailsType[];
+  type: string;
 };
-const Task: React.FC<TaskProps> = ({ allTasks, category, taskList }) => {
+
+const Task: React.FC<TaskProps> = ({ allTasks, category, taskList, type }) => {
   const TaskContext = useTask();
   const { handleTaskUpdate } = TaskContext;
+
+  const onTaskUpdate = (task: TaskDetailsType) => {
+    if (type === "weekly") {
+      toast.warning("Cannot update tasks in weekly view", { autoClose: 900 });
+      return;
+    }
+    handleTaskUpdate(task, allTasks);
+  };
+
+  const handleTaskChecked = (task: TaskDetailsType): boolean => {
+    const today = format(new Date(), "yyyy-MM-dd");
+    if (task.completedOn && task.completedOn?.includes(today)) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <div className="tasks">
       <h2 className="text-2xl font-bold mb-4 text-left">{category}</h2>
@@ -22,13 +43,11 @@ const Task: React.FC<TaskProps> = ({ allTasks, category, taskList }) => {
               <DeleteTaskModal task={task} />{" "}
               <input
                 type="checkbox"
-                checked={Boolean(task.completedOn)}
+                checked={handleTaskChecked(task)}
                 className="checkbox checkbox-accent"
                 name="task"
                 id="task"
-                onChange={() => {
-                  handleTaskUpdate(task, allTasks);
-                }}
+                onChange={() => onTaskUpdate(task)}
               />{" "}
               <h4
                 onClick={() => {

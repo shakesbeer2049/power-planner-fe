@@ -1,4 +1,6 @@
+import { TaskDetailsType } from "../types/types";
 import { getToday, isDateInCurrentWeek } from "./daysAndDates";
+import { format, startOfWeek, addDays } from "date-fns";
 
 export const calculateDailyProgress = (taskData) => {
   const tasksToday = taskData.filter((task) =>
@@ -16,7 +18,7 @@ export const generateStats = (tasks, selectedStat) => {
   if (selectedStat === "overall") {
     totalTasks = tasks.length || 0;
     completedTasks = tasks.filter((task) => task.isCompleted).length;
-  }else if (selectedStat === "weekly") {
+  } else if (selectedStat === "weekly") {
     const today = getToday();
     totalTasks = tasks.filter((task) =>
       isDateInCurrentWeek(task.createdOn)
@@ -38,4 +40,48 @@ export const generateStats = (tasks, selectedStat) => {
 
   const achievedPercent = ((completedTasks / totalTasks) * 100).toFixed(1);
   return { totalTasks, completedTasks, achievedPercent };
+};
+
+export const createWeeklyTasks = (tasks: TaskDetailsType[]) => {
+  try {
+    const weekStart = startOfWeek(new Date(), { weekStartsOn: 1 }); // Start from Monday
+    const weekMap: Record<string, string> = {};
+    const dateTaskMap: Record<string, TaskDetailsType[]> = {}; // Fixed: Use array instead of tuple
+
+    // Create a mapping of day names to dates
+    for (let i = 0; i < 7; i++) {
+      const currentDate = addDays(weekStart, i);
+      const dayName = format(currentDate, "EEEE");
+      const formattedDate = format(currentDate, "yyyy-MM-dd");
+
+      weekMap[dayName] = formattedDate;
+      dateTaskMap[formattedDate] = []; // Ensure we initialize arrays properly
+    }
+
+    // Assign tasks to their correct date
+    for (const task of tasks) {
+      const taskScheduledOn = task.scheduledOn.split("T")[0]; // Extract date part only
+      if (dateTaskMap[taskScheduledOn]) {
+        dateTaskMap[taskScheduledOn].push(task);
+      }
+    }
+
+    console.log("Week Map:", weekMap);
+    console.log("Date Task Map:", dateTaskMap);
+
+    // Convert the `dateTaskMap` into a `dayName` → tasks mapping
+    const weeklyTasksFinal: Record<string, TaskDetailsType[]> = {};
+    for (const dayName in weekMap) {
+      if (dateTaskMap[weekMap[dayName]]) {
+        weeklyTasksFinal[dayName] = dateTaskMap[weekMap[dayName]];
+      } else {
+        weeklyTasksFinal[dayName] = []; // Ensure empty arrays for missing days
+      }
+    }
+
+    return weeklyTasksFinal;
+  } catch (error) {
+    console.error("Error in createWeeklyTasks:", error);
+    return {}; // Return empty object on failure
+  }
 };
