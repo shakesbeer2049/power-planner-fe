@@ -8,7 +8,7 @@ export default function useApiCaller(
   callType: "GET" | "POST" | "PUT" | "DELETE",
   body: Record<string, any> = {}
 ): UseApiCallerReturnType {
-  const [data, setData] = useState<TaskDetailsType[] | null>(null);
+  const [data, setData] = useState<unknown | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState<Error | null>(null);
 

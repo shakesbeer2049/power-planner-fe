@@ -18,8 +18,7 @@ const Drawer: React.FC = () => {
     { name: "My Week", path: "weekly", key: "weekly" },
     { name: "Performance", path: "performance", key: "performance" },
     { name: "Stats", path: "stats", key: "stats" },
-    { name: "LeaderBoards", path: "leaderboards", key: "leaderboards" },
-    { name: "Global Chat", path: "global-chat", key: "global-chat" },
+    { name: "Leaderboards", path: "leaderboards", key: "leaderboards" },
   ];
 
   // Extract the last part of the path to match the key

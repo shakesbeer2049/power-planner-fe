@@ -7,7 +7,7 @@ export const calculateDailyProgress = (taskData) => {
     task.taskRepeatsOn.includes(getToday())
   );
   const dailyTaskCount = tasksToday.length;
-  const completedTasks = tasksToday.filter((task) => task.isCompleted).length;
+  const completedTasks = tasksToday.filter((task) => task.completedOn).length;
   return parseInt((completedTasks / dailyTaskCount) * 100);
 };
 
@@ -17,7 +17,7 @@ export const generateStats = (tasks, selectedStat) => {
 
   if (selectedStat === "overall") {
     totalTasks = tasks.length || 0;
-    completedTasks = tasks.filter((task) => task.isCompleted).length;
+    completedTasks = tasks.filter((task) => task.completedOn).length;
   } else if (selectedStat === "weekly") {
     const today = getToday();
     totalTasks = tasks.filter((task) =>
@@ -25,7 +25,7 @@ export const generateStats = (tasks, selectedStat) => {
     ).length;
 
     completedTasks = tasks.filter(
-      (task) => isDateInCurrentWeek(task.createdOn) && task.isCompleted
+      (task) => isDateInCurrentWeek(task.createdOn) && task.completedOn
     ).length;
   } else if (selectedStat === "yearly") {
     const thisYear = new Date().getFullYear().toString();
@@ -34,11 +34,14 @@ export const generateStats = (tasks, selectedStat) => {
       task?.createdOn?.includes(thisYear)
     ).length;
     completedTasks = tasks.filter(
-      (task) => task?.createdOn?.includes(thisYear) && task.isCompleted
+      (task) => task?.createdOn?.includes(thisYear) && task.completedOn
     ).length;
   }
+  let achievedPercent = "0";
+  if (completedTasks > 0) {
+    achievedPercent = ((completedTasks / totalTasks) * 100).toFixed(1);
+  }
 
-  const achievedPercent = ((completedTasks / totalTasks) * 100).toFixed(1);
   return { totalTasks, completedTasks, achievedPercent };
 };
 
@@ -46,7 +49,7 @@ export const createWeeklyTasks = (tasks: TaskDetailsType[]) => {
   try {
     const weekStart = startOfWeek(new Date(), { weekStartsOn: 1 }); // Start from Monday
     const weekMap: Record<string, string> = {};
-    const dateTaskMap: Record<string, TaskDetailsType[]> = {}; // Fixed: Use array instead of tuple
+    const dateTaskMap: Record<string, TaskDetailsType[]> = {};
 
     // Create a mapping of day names to dates
     for (let i = 0; i < 7; i++) {

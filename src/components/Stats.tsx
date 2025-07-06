@@ -26,6 +26,7 @@ const Stats = () => {
       taskList,
       selectedStat
     );
+    console.log({ totalTasks, completedTasks, achievedPercent });
     setStats({ totalTasks, completedTasks, achievedPercent });
   }, [taskList, selectedStat]);
 
@@ -62,7 +63,10 @@ const Stats = () => {
         <div className="cards-div">
           <Card title={"Total Tasks"} data={stats.totalTasks} />
           <Card title={"Completed"} data={stats.completedTasks} />
-          <Card title={"Achievement"} data={`${stats.achievedPercent}%`} />
+          <Card
+            title={"Achievement"}
+            data={`${stats?.achievedPercent || 0}%`}
+          />
         </div>
       </div>
     </div>

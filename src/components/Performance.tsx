@@ -62,7 +62,7 @@ const Performance: React.FC = () => {
     const monthlyJsx = monthlyTasksArray.map((monthTasks, index) => {
       const totalTasksThisMonth = monthTasks.length;
 
-      const completed = monthTasks?.filter((task) => task.isCompleted).length;
+      const completed = monthTasks?.filter((task) => task.completedOn).length;
 
       return (
         <>
@@ -126,7 +126,7 @@ const Performance: React.FC = () => {
 
     // Create JSX for the selected month's weekly data
     const weeklyJsx = weeklyTasksArray.map((weekTasks, weekIndex) => {
-      const completed = weekTasks.filter((task) => task.isCompleted).length;
+      const completed = weekTasks.filter((task) => task.completedOn).length;
 
       return (
         <tr key={weekIndex}>
