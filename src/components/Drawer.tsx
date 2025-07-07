@@ -1,6 +1,5 @@
 import "../styles/drawer.css";
 import { useAuth } from "../context/AuthContext.tsx";
-import AddTask from "./AddTask.tsx";
 import UserProfile from "./UserProfile";
 import { useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
@@ -19,6 +18,7 @@ const Drawer: React.FC = () => {
     { name: "Performance", path: "performance", key: "performance" },
     { name: "Stats", path: "stats", key: "stats" },
     { name: "Leaderboards", path: "leaderboards", key: "leaderboards" },
+    { name: "Notifications", path: "notifications", key: "notifications" },
   ];
 
   // Extract the last part of the path to match the key
@@ -63,14 +63,14 @@ const Drawer: React.FC = () => {
             <div className="task-progress"></div>
             <div className="logo flex pb-1 items-center">
               <HiChevronDoubleUp className="text-2xl" />
-              <h1 className="ml-1">
-                <Link to="/"> LevelUP</Link>
+              <h1 className="ml-1 mb-1 text-5xl">
+                <Link to="/">SKILLBOUND</Link>
               </h1>
             </div>
 
-            <li>
+            {/* <li>
               <AddTask isModal={true} />
-            </li>
+            </li> */}
 
             {menuItems.map((item) => (
               <li

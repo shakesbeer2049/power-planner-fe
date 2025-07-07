@@ -29,11 +29,19 @@ const WeeklyTasks = () => {
     }
   }, [weeklyTaskList]);
 
-  if (tasksLoading) return <>Please wait ...</>;
-  if (taskError) {
-    console.error("Error fetching weekly tasks");
-    return <>Please try again.</>;
-  }
+  if (tasksLoading)
+    return (
+      <div className="flex justify-center items-center h-96">
+        <span className="loading loading-spinner text-primary"></span>
+      </div>
+    );
+
+  if (taskError)
+    return (
+      <div className="text-center text-red-500 font-semibold mt-20">
+        Something went wrong fetching your tasks. Please try again.
+      </div>
+    );
 
   const weekdays = [
     "Monday",
@@ -46,27 +54,33 @@ const WeeklyTasks = () => {
   ];
 
   return (
-    <div className="outlet outlet-container ml-8 mt-2">
-      <h1 className="text-3xl font-bold text-left mt-[2.5rem] mb-0 weekly-heading">
+    <div className="outlet outlet-container ml-4 mt-8 px-4">
+      <h1 className="text-4xl font-bold text-left mt-8 mb-6 text-primary">
         Weekly Tasks
       </h1>
-      {weekdays.map((day) => (
-        <div key={day} className="mt-10">
-          <h1 className="text-5xl font-bold mb-10 text-teal-800 text-left day-name">
-            {day}
-          </h1>
-          {allTasks[day] && allTasks[day].length > 0 ? (
-            <Task
-              taskList={allTasks[day]}
-              category={""}
-              allTasks={weeklyTaskList}
-              type="weekly"
-            />
-          ) : (
-            "What an empty day!"
-          )}
-        </div>
-      ))}
+
+      <div className="flex flex-col gap-8">
+        {weekdays.map((day) => (
+          <div key={day} className="bg-white p-6 rounded-xl shadow-md">
+            <h2 className="text-2xl font-semibold text-teal-600 mb-4 border-b pb-2">
+              {day}
+            </h2>
+
+            {allTasks[day] && allTasks[day].length > 0 ? (
+              <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                <Task
+                  taskList={allTasks[day]}
+                  category={""}
+                  allTasks={weeklyTaskList}
+                  type="weekly"
+                />
+              </div>
+            ) : (
+              <div className="text-gray-400 italic">No tasks for this day.</div>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

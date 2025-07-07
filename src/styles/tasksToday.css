@@ -14,22 +14,32 @@
 }
 
 .form-data-main {
-    border: 1px solid rgba(0, 0, 0, 0.199);
-    padding: 5px;
+    /* border: 1px solid rgba(0, 0, 0, 0.199); */
+    /* padding: 5px; */
     border-radius: 9px;
-    box-shadow: rgba(0, 0, 0, 0.308) 2px 2px 2px;
+    /* box-shadow: rgba(0, 0, 0, 0.308) 2px 2px 2px; */
 }
 
 .task-category {
-    width: fit-content;
+    width: 100%;
     border: 1px solid rgba(0, 0, 0, 0.233);
     border-radius: 5px;
+    padding: 7px;
+
 }
 
+.menu li {
+    margin-bottom: 5px;
+}
+
+.tasks {
+    margin-top: 3%;
+
+}
 
 @media (min-width:800px) {
     .tasks {
-        margin-top: 3%;
+        /* margin-top: 3%; */
         display: flex;
         align-content: center;
         flex-direction: column;

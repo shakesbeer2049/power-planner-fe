@@ -13,6 +13,7 @@ import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/RegisterForm";
 import Leaderboards from "./components/Leaderboards";
 import GlobalChat from "./components/GlobalChat";
+import NotificationScheduler from "./components/NotificationScheduler";
 
 const App: React.FC = () => {
   const [selectedMenu, setSelectedMenu] = useState<string>("daily");
@@ -53,8 +54,8 @@ const App: React.FC = () => {
           element: <Leaderboards />,
         },
         {
-          path: "global-chat",
-          element: <GlobalChat />,
+          path: "notifications",
+          element: <NotificationScheduler />,
         },
       ],
     },

@@ -3,9 +3,11 @@ import "../styles/register.css";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { callApi } from "../utils/callApi";
 import { useAuth } from "../context/AuthContext.tsx";
-import Navbar from "./Navbar";
+import Nav from "./Nav";
 import { isMobile } from "react-device-detect";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { IoEyeOutline } from "react-icons/io5";
 
 const SignupForm = () => {
   const navigate = useNavigate();
@@ -20,6 +22,8 @@ const SignupForm = () => {
   } = useForm();
 
   const password = watch("password");
+  const [showCPwd, setShowCPwd] = useState(false);
+  const [showPwd, setShowPwd] = useState(false);
 
   const handleSignup: SubmitHandler<FieldValues> = async (data) => {
     const response = await callApi("/users/register", "POST", data);
@@ -30,12 +34,14 @@ const SignupForm = () => {
       const userDeets = { ...response.data.user, loggedIn: true };
       setUserDetails(userDeets);
       navigate("/tasks/daily");
+    } else {
+      alert(response.response.data.message);
     }
   };
 
   return (
     <>
-      <Navbar />
+      <Nav />
       <div className="register-container">
         <h3 className="font-bold text-lg text-center register-txt">Sign Up</h3>
         <div className="signup-details">
@@ -106,7 +112,7 @@ const SignupForm = () => {
                 />
               </svg>
               <input
-                type="password"
+                type={showPwd ? "text" : "password"}
                 className="grow"
                 placeholder="Password"
                 {...register("password", {
@@ -117,6 +123,9 @@ const SignupForm = () => {
                   },
                 })}
               />
+              <span onClick={() => setShowPwd(!showPwd)}>
+                <IoEyeOutline />
+              </span>
             </label>
             {errors.password && (
               <div className="text-red-500">
@@ -137,7 +146,7 @@ const SignupForm = () => {
                 />
               </svg>
               <input
-                type="password"
+                type={showCPwd ? "text" : "password"}
                 className="grow"
                 placeholder="Confirm Password"
                 {...register("confirmPassword", {
@@ -146,6 +155,9 @@ const SignupForm = () => {
                     value === password || "Passwords do not match",
                 })}
               />
+              <span onClick={() => setShowCPwd(!showCPwd)}>
+                <IoEyeOutline />
+              </span>
             </label>
             {errors.confirmPassword && (
               <div className="text-red-500">

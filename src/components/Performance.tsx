@@ -4,9 +4,11 @@ import { callApi } from "../utils/callApi";
 import { TaskDetailsType } from "../types/types";
 
 const Performance: React.FC = () => {
-  // const { taskList } = useContext(TaskContext);
+  const [taskList, setTaskList] = useState<TaskDetailsType[]>([]);
+  const years = getYears();
+  const [year, setYear] = useState(years[years.length - 1]);
+  const [month, setMonth] = useState("");
 
-  const [taskList, setTaskList] = useState([]);
   useEffect(() => {
     const fetchAllTasks = async () => {
       const res = await callApi("/tasks/all", "GET", {});
@@ -14,24 +16,6 @@ const Performance: React.FC = () => {
     };
     fetchAllTasks();
   }, []);
-  const years = getYears();
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  const [year, setYear] = useState(years[years.length - 1]);
-  const [month, setMonth] = useState("");
 
   const handleYearSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setYear(Number(e.target.value));
@@ -42,201 +26,150 @@ const Performance: React.FC = () => {
   };
 
   const makeMonthlyData = () => {
-    // get the tasks created this year
-    const tasksThisYear = taskList.filter((task: TaskDetailsType) =>
+    const tasksThisYear = taskList.filter((task) =>
       task.createdOn.includes(String(year))
     );
-
     const monthlyTasksArray: TaskDetailsType[][] = Array.from(
       { length: 12 },
       () => []
     );
 
-    if (tasksThisYear) {
-      tasksThisYear.forEach((task: TaskDetailsType) => {
-        const month = new Date(task.createdOn).getMonth();
-        monthlyTasksArray[month].push(task);
-      });
-    }
+    tasksThisYear.forEach((task) => {
+      const month = new Date(task.createdOn).getMonth();
+      monthlyTasksArray[month].push(task);
+    });
 
-    const monthlyJsx = monthlyTasksArray.map((monthTasks, index) => {
-      const totalTasksThisMonth = monthTasks.length;
-
-      const completed = monthTasks?.filter((task) => task.completedOn).length;
-
+    return monthlyTasksArray.map((monthTasks, index) => {
+      const completed = monthTasks.filter((task) => task.completedOn).length;
       return (
-        <>
-          <tr>
-            <td className="font-bold">{monthNames[index]}</td>
-            <td className="font-bold">
-              {completed} out of {totalTasksThisMonth}
-            </td>
-            <td>
-              <progress
-                className="progress progress-primary w-28"
-                value={completed}
-                max={totalTasksThisMonth}
-              ></progress>
-            </td>
-          </tr>
-        </>
+        <tr key={index}>
+          <td className="font-semibold text-gray-700">{months[index]}</td>
+          <td>
+            {completed} / {monthTasks.length}
+          </td>
+          <td>
+            <progress
+              className="progress progress-primary w-40"
+              value={completed}
+              max={monthTasks.length}
+            ></progress>
+          </td>
+        </tr>
       );
     });
-    return monthlyJsx;
   };
 
   const makeWeeklyData = () => {
-    const monthIndex = monthNames.indexOf(month); // Get the index of the month
-
-    if (monthIndex === -1) {
-      console.error("Invalid month name provided");
-      return;
-    }
-
-    // Get the tasks created in the specified month of this year
-    const tasksThisMonth = taskList.filter((task: TaskDetailsType) => {
+    const monthIndex = months.indexOf(month);
+    const tasksThisMonth = taskList.filter((task) => {
       const taskDate = new Date(task.createdOn);
-
       return (
-        taskDate.getFullYear() == year && taskDate.getMonth() == monthIndex
+        taskDate.getFullYear() === year && taskDate.getMonth() === monthIndex
       );
     });
-    // Initialize an array for the weeks in the selected month (maximum of 6 weeks)
+
     const weeklyTasksArray: TaskDetailsType[][] = Array.from(
       { length: 5 },
       () => []
     );
 
-    // Function to calculate which week of the month the task belongs to
     const getWeekOfMonth = (date: Date) => {
-      const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-      const dayOfMonth = date.getDate();
-      const firstDayOfWeek = firstDayOfMonth.getDay(); // Day of the week the month starts on
-      const adjustedDayOfMonth = dayOfMonth + firstDayOfWeek;
-      return Math.ceil(adjustedDayOfMonth / 7);
+      const first = new Date(date.getFullYear(), date.getMonth(), 1);
+      return Math.ceil((date.getDate() + first.getDay()) / 7);
     };
 
-    if (tasksThisMonth.length > 0) {
-      tasksThisMonth.forEach((task: TaskDetailsType) => {
-        const taskDate = new Date(task.createdOn);
-        const week = getWeekOfMonth(taskDate) - 1; // Zero-based index for the week
-        weeklyTasksArray[week].push(task);
-      });
-    }
+    tasksThisMonth.forEach((task) => {
+      const week = getWeekOfMonth(new Date(task.createdOn)) - 1;
+      weeklyTasksArray[week].push(task);
+    });
 
-    // Create JSX for the selected month's weekly data
-    const weeklyJsx = weeklyTasksArray.map((weekTasks, weekIndex) => {
+    return weeklyTasksArray.map((weekTasks, index) => {
       const completed = weekTasks.filter((task) => task.completedOn).length;
-
       return (
-        <tr key={weekIndex}>
-          <td className="font-bold">Week {weekIndex + 1}</td>
-          <td className="font-bold">
-            {completed} out of {weekTasks.length}
+        <tr key={index}>
+          <td className="font-semibold text-gray-700">Week {index + 1}</td>
+          <td>
+            {completed} / {weekTasks.length}
           </td>
           <td>
             <progress
-              className="progress progress-primary w-28"
+              className="progress progress-accent w-40"
               value={completed}
               max={weekTasks.length}
             ></progress>
           </td>
         </tr>
       );
-
-      return null;
     });
-
-    return weeklyJsx;
   };
 
   return (
-    <>
-      <div className="tasks-today text-left mt-2 m-1">
-        <h1 className="text-3xl font-bold text-center mt-[2.5rem]">
-          Performance Review
-        </h1>
+    <div className="p-4 md:p-8">
+      <h1 className="text-4xl font-bold text-center text-primary mb-8">
+        Performance Review
+      </h1>
 
-        <div className="data-container">
-          <div className="dropdown-selectors flex justify-between w-3/4 m-auto">
-            <select
-              className="select select-primary w-fit max-w-xs mr-2"
-              onChange={handleYearSelect}
-              value={year}
-            >
-              <option disabled selected>
-                Select Year
-              </option>
-              {years.map((ye) => (
-                <option key={ye}>{ye}</option>
-              ))}
-            </select>
-            <select
-              className="select select-primary w-fit max-w-xs"
-              onChange={handleMonthSelect}
-            >
-              <option disabled selected>
-                Select Month
-              </option>
-              {months.map((mon) => (
-                <option key={mon}>{mon}</option>
-              ))}
-            </select>
-          </div>
-          {/* BLANK */}
-          {!year && !month ? (
-            <h1 className="text-xl mt-8 font-bold text-center">
-              Please Select A Year
-            </h1>
-          ) : (
-            ""
-          )}
-
-          {/* YEAR */}
-          {year && !month ? (
-            <div className="data-table">
-              <div className="overflow-x-auto">
-                <table className="table table-zebra">
-                  {/* head */}
-                  <thead>
-                    <tr>
-                      <th className="text-lg">Month</th>
-                      <th className="text-lg">Completed</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>{makeMonthlyData()}</tbody>
-                </table>
-              </div>
-            </div>
-          ) : (
-            ""
-          )}
-
-          {/* YEAR AND MONTH */}
-
-          {year && month ? (
-            <div className="data-table">
-              <div className="overflow-x-auto">
-                <table className="table table-zebra">
-                  {/* head */}
-                  <thead>
-                    <tr>
-                      <th className="text-lg">Month</th>
-                      <th className="text-lg">Completed</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>{makeWeeklyData()}</tbody>
-                </table>
-              </div>
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
+      <div className="flex flex-col md:flex-row gap-4 justify-center mb-6">
+        <select
+          className="select select-primary"
+          onChange={handleYearSelect}
+          value={year}
+        >
+          <option disabled>Select Year</option>
+          {years.map((ye) => (
+            <option key={ye}>{ye}</option>
+          ))}
+        </select>
+        <select
+          className="select select-secondary"
+          onChange={handleMonthSelect}
+          value={month}
+        >
+          <option disabled value="">
+            Select Month
+          </option>
+          {months.map((mon) => (
+            <option key={mon}>{mon}</option>
+          ))}
+        </select>
       </div>
-    </>
+
+      {!year && !month && (
+        <p className="text-center text-lg text-gray-600">
+          Please select a year to begin
+        </p>
+      )}
+
+      {year && !month && (
+        <div className="overflow-x-auto">
+          <table className="table table-zebra w-full">
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Completed</th>
+                <th>Progress</th>
+              </tr>
+            </thead>
+            <tbody>{makeMonthlyData()}</tbody>
+          </table>
+        </div>
+      )}
+
+      {year && month && (
+        <div className="overflow-x-auto">
+          <table className="table table-zebra w-full">
+            <thead>
+              <tr>
+                <th>Week</th>
+                <th>Completed</th>
+                <th>Progress</th>
+              </tr>
+            </thead>
+            <tbody>{makeWeeklyData()}</tbody>
+          </table>
+        </div>
+      )}
+    </div>
   );
 };
 
