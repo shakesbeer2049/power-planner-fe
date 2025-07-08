@@ -117,7 +117,7 @@ const TasksToday = () => {
         </div>
       </div>
 
-      <div className="mt-10">
+      <div className="mt-8">
         <AddTask />
       </div>
     </div>

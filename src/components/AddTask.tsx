@@ -10,11 +10,7 @@ import { TaskDetailsType } from "../types/types";
 import { motion } from "framer-motion";
 import "../styles/drawer.css";
 
-type AddTaskProps = {
-  isModal: boolean;
-};
-
-const AddTask: React.FC<AddTaskProps> = () => {
+const AddTask = () => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const taskContext = useTask();
@@ -158,9 +154,10 @@ const AddTask: React.FC<AddTaskProps> = () => {
     <>
       <button
         onClick={toggleForm}
-        className="flex items-center gap-2 text-blue-500 hover:text-blue-600"
+        className="fixed bottom-3 right-3 flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-200 font-medium"
       >
-        <Plus size={18} /> Add Task
+        <Plus size={18} className="text-lg" />
+        <span className="sm:block">Add Task</span>
       </button>
       {isFormVisible && (
         <motion.div
