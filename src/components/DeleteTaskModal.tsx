@@ -15,7 +15,7 @@ const DeleteTaskModal: React.FC<DeleteTaskModalProps> = ({ task }) => {
             <button
               className="btn btn-error"
               onClick={() => context.handleTaskDelete(task)}
-              disabled={task.isCompleted}
+              disabled={Boolean(task.completedOn)}
             >
               Delete
             </button>

@@ -3,16 +3,20 @@ import "../styles/tasksToday.css";
 import "react-toastify/dist/ReactToastify.css";
 import Task from "./Task";
 import AddTask from "./AddTask";
-import { TaskDetailsType } from "../types/types";
 import { useTask } from "../context/TaskContext";
 import DoneForToday from "./DoneForToday";
+import { TaskDetailsType } from "../types/types";
 
 const TasksToday = () => {
   const TaskContext = useTask();
   const { taskList } = TaskContext;
 
   const [allTasksComplete, setAllTasksComplete] = useState(false);
-  const [tasksToday, setTasksToday] = useState({
+  const [tasksToday, setTasksToday] = useState<{
+    health: TaskDetailsType[];
+    wealth: TaskDetailsType[];
+    knowledge: TaskDetailsType[];
+  }>({
     health: [],
     wealth: [],
     knowledge: [],

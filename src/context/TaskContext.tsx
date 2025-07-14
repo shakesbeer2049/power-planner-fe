@@ -9,15 +9,18 @@ import { CustomJWTPayload } from "../types/types";
 import { TaskDetailsType } from "../types/types";
 
 type APICallerType = {
-  data: any;
-  isError: any;
-  isLoading: any;
+  data: unknown;
+  isError: unknown;
+  isLoading: unknown;
 };
 type TaskContextType = {
-  taskList: any[];
-  setTaskList: any;
-  handleTaskUpdate: any;
-  handleTaskDelete: any;
+  taskList: TaskDetailsType[];
+  setTaskList: React.Dispatch<React.SetStateAction<TaskDetailsType[]>>;
+  handleTaskUpdate: (
+    taskToUpdate: TaskDetailsType,
+    sourceTaskList: TaskDetailsType[]
+  ) => Promise<void>;
+  handleTaskDelete: (taskToDelete: TaskDetailsType) => Promise<void>;
 };
 
 type TaskProviderProps = {
@@ -40,7 +43,7 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
 }): React.ReactElement => {
   const [taskList, setTaskList] = useState<TaskDetailsType[]>([]);
   const AuthContext = useAuth();
-  const { setUserDetails, userDetails } = AuthContext;
+  const { setUserDetails } = AuthContext;
 
   // Initial user details fetch
   useEffect(() => {

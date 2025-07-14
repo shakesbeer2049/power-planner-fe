@@ -1,16 +1,28 @@
 import { useEffect, useState } from "react";
 import axios, { AxiosRequestConfig } from "axios";
-import { TaskDetailsType } from "../types/types";
-import { UseApiCallerReturnType } from "../types/types";
 
-export default function useApiCaller(
+type UseApiCallerReturnType<T> = {
+  data: T | null;
+  isLoading: boolean;
+  isError: Error | null;
+  refetch: () => Promise<void>;
+};
+
+export default function useApiCaller<T = unknown>(
   url: string,
   callType: "GET" | "POST" | "PUT" | "DELETE",
-  body: Record<string, any> = {}
-): UseApiCallerReturnType {
-  const [data, setData] = useState<unknown | null>(null);
+  body?: Record<string, unknown>
+): UseApiCallerReturnType<T> {
+  const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState<Error | null>(null);
+
+  const handleUnauthorized = () => {
+    window.location.href =
+      import.meta.env.VITE_ENV === "development"
+        ? import.meta.env.VITE_DEV_FE_URL
+        : import.meta.env.VITE_PROD_FE_URL;
+  };
 
   const apiCaller = async () => {
     if (!url) {
@@ -38,13 +50,10 @@ export default function useApiCaller(
           Authorization: `Bearer ${jwt}`,
         },
       };
-
       const response = await axios(config);
-      // console.log("response in useApiCaller", response.data);
-      setData(response.data.data);
+      setData(response.data.data as T);
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error));
-      console.error(err, "Error in fetching data");
       setIsError(err);
 
       if (err.message.includes("401") || err.message === "Unauthorized") {
@@ -55,15 +64,9 @@ export default function useApiCaller(
     }
   };
 
-  const handleUnauthorized = () => {
-    window.location.href =
-      import.meta.env.VITE_ENV === "development"
-        ? import.meta.env.VITE_DEV_FE_URL
-        : import.meta.env.VITE_PROD_FE_URL;
-  };
-
   useEffect(() => {
     apiCaller();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url, callType, JSON.stringify(body)]);
 
   const refetch = async () => {

@@ -2,16 +2,19 @@ import { TaskDetailsType } from "../types/types";
 import { getToday, isDateInCurrentWeek } from "./daysAndDates";
 import { format, startOfWeek, addDays } from "date-fns";
 
-export const calculateDailyProgress = (taskData) => {
+export const calculateDailyProgress = (taskData: TaskDetailsType[]) => {
   const tasksToday = taskData.filter((task) =>
     task.taskRepeatsOn.includes(getToday())
   );
   const dailyTaskCount = tasksToday.length;
   const completedTasks = tasksToday.filter((task) => task.completedOn).length;
-  return parseInt((completedTasks / dailyTaskCount) * 100);
+  return parseInt(((completedTasks / dailyTaskCount) * 100).toString());
 };
 
-export const generateStats = (tasks, selectedStat) => {
+export const generateStats = (
+  tasks: TaskDetailsType[],
+  selectedStat: string
+) => {
   let totalTasks = 0;
   let completedTasks = 0;
 
@@ -19,22 +22,37 @@ export const generateStats = (tasks, selectedStat) => {
     totalTasks = tasks.length || 0;
     completedTasks = tasks.filter((task) => task.completedOn).length;
   } else if (selectedStat === "weekly") {
-    const today = getToday();
     totalTasks = tasks.filter((task) =>
-      isDateInCurrentWeek(task.createdOn)
+      isDateInCurrentWeek(
+        typeof task.createdOn === "string"
+          ? task.createdOn
+          : task.createdOn.toISOString()
+      )
     ).length;
 
     completedTasks = tasks.filter(
-      (task) => isDateInCurrentWeek(task.createdOn) && task.completedOn
+      (task) =>
+        isDateInCurrentWeek(
+          typeof task.createdOn === "string"
+            ? task.createdOn
+            : task.createdOn.toISOString()
+        ) && task.completedOn
     ).length;
   } else if (selectedStat === "yearly") {
     const thisYear = new Date().getFullYear().toString();
 
     totalTasks = tasks.filter((task) =>
-      task?.createdOn?.includes(thisYear)
+      (typeof task.createdOn === "string"
+        ? task.createdOn
+        : task.createdOn?.toISOString()
+      )?.includes(thisYear)
     ).length;
     completedTasks = tasks.filter(
-      (task) => task?.createdOn?.includes(thisYear) && task.completedOn
+      (task) =>
+        (typeof task.createdOn === "string"
+          ? task.createdOn
+          : task.createdOn?.toISOString()
+        )?.includes(thisYear) && task.completedOn
     ).length;
   }
   let achievedPercent = "0";

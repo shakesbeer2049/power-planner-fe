@@ -6,9 +6,7 @@ import { TaskDetailsType } from "../types/types";
 import { createWeeklyTasks } from "../utils/taskCalculations";
 
 const WeeklyTasks = () => {
-  const [allTasks, setAllTasks] = useState<Record<string, TaskDetailsType[]>>(
-    {}
-  );
+  const [allTasks, setAllTasks] = useState<Record<string, TaskDetailsType[]>>();
 
   const url =
     import.meta.env.VITE_ENV === "development"
@@ -66,12 +64,12 @@ const WeeklyTasks = () => {
               {day}
             </h2>
 
-            {allTasks[day] && allTasks[day].length > 0 ? (
+            {allTasks?.[day] && allTasks[day].length > 0 ? (
               <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 <Task
                   taskList={allTasks[day]}
                   category={""}
-                  allTasks={weeklyTaskList}
+                  allTasks={Array.isArray(weeklyTaskList) ? weeklyTaskList : []}
                   type="weekly"
                 />
               </div>

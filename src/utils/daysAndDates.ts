@@ -1,4 +1,4 @@
-export const isDateInCurrentWeek = (date) => {
+export const isDateInCurrentWeek = (date: string) => {
   const now = new Date();
 
   // Get the start of the week (Sunday)
@@ -70,7 +70,7 @@ export const getYears = () => {
   return years;
 };
 
-export const getWeekOfMonth = (date) => {
+export const getWeekOfMonth = (date: string) => {
   // Clone the date to avoid modifying the original
   const clonedDate = new Date(date);
 

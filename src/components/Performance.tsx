@@ -26,9 +26,10 @@ const Performance: React.FC = () => {
   };
 
   const makeMonthlyData = () => {
-    const tasksThisYear = taskList.filter((task) =>
-      task.createdOn.includes(String(year))
-    );
+    const tasksThisYear = taskList.filter((task) => {
+      const createdDate = new Date(task.createdOn);
+      return createdDate.getFullYear() === year;
+    });
     const monthlyTasksArray: TaskDetailsType[][] = Array.from(
       { length: 12 },
       () => []

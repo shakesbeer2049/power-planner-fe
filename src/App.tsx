@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./styles/App.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Drawer from "./components/Drawer";
@@ -12,12 +12,9 @@ import { AuthProvider } from "./context/AuthContext";
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/RegisterForm";
 import Leaderboards from "./components/Leaderboards";
-import GlobalChat from "./components/GlobalChat";
 import NotificationScheduler from "./components/NotificationScheduler";
 
 const App: React.FC = () => {
-  const [selectedMenu, setSelectedMenu] = useState<string>("daily");
-
   const router = createBrowserRouter([
     { path: "/", element: <Home /> },
     { path: "/login", element: <LoginForm /> },
@@ -26,10 +23,7 @@ const App: React.FC = () => {
       path: "/tasks",
       element: (
         <TaskProvider>
-          <Drawer
-            selectedMenu={selectedMenu}
-            setSelectedMenu={setSelectedMenu}
-          />
+          <Drawer />
         </TaskProvider>
       ),
       children: [

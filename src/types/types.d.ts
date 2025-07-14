@@ -7,6 +7,7 @@ export type TaskDetailsType = {
   taskCategory: string;
   createdOn: string | Date;
   relatedUserId: string;
+  scores: number;
 };
 
 export type DeleteTaskModalProps = {

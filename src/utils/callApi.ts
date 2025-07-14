@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
-export const callApi = async (url, method, body) => {
+export const callApi = async (url: string, method: string, body: unknown) => {
   const jwt = localStorage.getItem("token");
   const baseURL =
     import.meta.env.VITE_ENV === "development"
@@ -27,8 +27,15 @@ export const callApi = async (url, method, body) => {
     return data;
   } catch (error) {
     console.log(error, "error in fetching data");
-    if (error.message === "Request failed with status code 401")
-      return error.response.data;
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "message" in error &&
+      (error as { message?: string }).message ===
+        "Request failed with status code 401"
+    ) {
+      return (error as AxiosError).response?.data;
+    }
     return error;
   }
 };
