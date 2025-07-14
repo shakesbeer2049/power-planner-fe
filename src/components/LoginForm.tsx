@@ -3,9 +3,9 @@ import "../styles/login.css";
 import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { callApi } from "../utils/callApi";
-import { useAuth } from "../context/AuthContext.tsx";
+import { useAuth } from "../context/AuthContext";
 import { IoEyeOutline } from "react-icons/io5";
-import Nav from "./Nav.tsx";
+import Nav from "./Nav";
 
 const LoginForm = () => {
   const navigate = useNavigate();

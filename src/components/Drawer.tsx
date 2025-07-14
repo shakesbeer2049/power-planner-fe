@@ -1,5 +1,5 @@
 import "../styles/drawer.css";
-import { useAuth } from "../context/AuthContext.tsx";
+import { useAuth } from "../context/AuthContext";
 import UserProfile from "./UserProfile";
 import { useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";

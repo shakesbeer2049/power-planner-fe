@@ -5,7 +5,7 @@ import * as taskService from "../utils/taskService";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useTask } from "../context/TaskContext";
-import { useAuth } from "../context/AuthContext.tsx";
+import { useAuth } from "../context/AuthContext";
 import { TaskDetailsType } from "../types/types";
 import { motion } from "framer-motion";
 import "../styles/drawer.css";
@@ -27,6 +27,7 @@ const AddTask = () => {
     createdOn: "",
     scheduledOn: "",
     completedOn: "",
+    scores: 0,
   });
 
   const handleTaskInput = (e: React.ChangeEvent<HTMLInputElement>) => {

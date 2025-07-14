@@ -2,7 +2,7 @@ import "../styles/home.css";
 import "../styles/register.css";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { callApi } from "../utils/callApi";
-import { useAuth } from "../context/AuthContext.tsx";
+import { useAuth } from "../context/AuthContext";
 import Nav from "./Nav";
 import { isMobile } from "react-device-detect";
 import { useNavigate } from "react-router-dom";

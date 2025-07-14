@@ -1,6 +1,6 @@
 import { HiChevronDoubleUp } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext.tsx";
+import { useAuth } from "../context/AuthContext";
 
 const Nav = () => {
   const AuthContext = useAuth();

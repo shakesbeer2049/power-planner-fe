@@ -1,12 +1,12 @@
 import "../styles/home.css";
 import { useEffect } from "react";
-import { useAuth } from "../context/AuthContext.tsx";
+import { useAuth } from "../context/AuthContext";
 
 import { jwtDecode } from "jwt-decode";
 import { callApi } from "../utils/callApi";
 import { CustomJWTPayload } from "../types/types";
-import Nav from "./Nav.tsx";
-import Slideshow from "./Slideshow.tsx";
+import Nav from "./Nav";
+import Slideshow from "./Slideshow";
 
 const Home = () => {
   const AuthContext = useAuth();
