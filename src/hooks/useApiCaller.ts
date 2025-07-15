@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
+import type { AxiosRequestConfig } from "axios";
 
 type UseApiCallerReturnType<T> = {
   data: T | null;

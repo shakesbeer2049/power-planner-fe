@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Task from "./Task";
 import "../styles/weekly.css";
 import useApiCaller from "../hooks/useApiCaller";
-import { TaskDetailsType } from "../types/types";
+import type { TaskDetailsType } from "../types/types";
 import { createWeeklyTasks } from "../utils/taskCalculations";
 
 const WeeklyTasks = () => {

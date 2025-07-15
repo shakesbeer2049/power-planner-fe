@@ -5,7 +5,7 @@ import Task from "./Task";
 import AddTask from "./AddTask";
 import { useTask } from "../context/TaskContext";
 import DoneForToday from "./DoneForToday";
-import { TaskDetailsType } from "../types/types";
+import type { TaskDetailsType } from "../types/types";
 
 const TasksToday = () => {
   const TaskContext = useTask();

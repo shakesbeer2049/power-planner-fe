@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
 import { useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import type { FieldValues, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { callApi } from "../utils/callApi";
 import { useAuth } from "../context/AuthContext";
 import { IoEyeOutline } from "react-icons/io5";
@@ -97,7 +98,7 @@ const LoginForm = () => {
             )}
           </form>
           <div className="goals-img">
-            <img src="dist/images/login-goals.png" alt="goals" />
+            <img src="/assets/screenshots/login-goals.webp" alt="goals" />
           </div>
         </div>
       </div>

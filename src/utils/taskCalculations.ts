@@ -1,4 +1,4 @@
-import { TaskDetailsType } from "../types/types";
+import type { TaskDetailsType } from "../types/types";
 import { getToday, isDateInCurrentWeek } from "./daysAndDates";
 import { format, startOfWeek, addDays } from "date-fns";
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { callApi } from "./callApi";
-import { TaskDetailsType } from "../types/types";
+import type { TaskDetailsType } from "../types/types";
 
 const baseUrl = `/tasks`;
 

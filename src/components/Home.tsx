@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 
 import { jwtDecode } from "jwt-decode";
 import { callApi } from "../utils/callApi";
-import { CustomJWTPayload } from "../types/types";
+import type { CustomJWTPayload } from "../types/types";
 import Nav from "./Nav";
 import Slideshow from "./Slideshow";
 

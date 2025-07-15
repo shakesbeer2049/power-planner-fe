@@ -9,7 +9,12 @@ interface LeaderboardType {
   hp: number;
   kp: number;
   score: number;
+  ranked: string;
 }
+
+type LeaderboardApiResponse = {
+  scores: LeaderboardType[];
+};
 
 const Leaderboard = () => {
   const url =
@@ -17,11 +22,12 @@ const Leaderboard = () => {
       ? import.meta.env.VITE_DEV_BE_URL
       : import.meta.env.VITE_PROD_BE_URL;
 
-  const {
-    data: leaderboardData = [] as LeaderboardType[],
-    isError: leaderboardError,
-    isLoading: leaderboardLoading,
-  } = useApiCaller(url + "/users/leaderboards", "GET", {});
+  const apiResult = useApiCaller(url + "/users/leaderboards", "GET", {});
+  const leaderboardData = (apiResult.data as LeaderboardApiResponse | null) ?? {
+    scores: [],
+  };
+  const leaderboardError = apiResult.isError;
+  const leaderboardLoading = apiResult.isLoading;
   console.log("leaderboardData", leaderboardData);
 
   if (leaderboardLoading) {
@@ -52,29 +58,28 @@ const Leaderboard = () => {
             </tr>
           </thead>
           <tbody>
-            {leaderboardData &&
-              leaderboardData.scores?.map(
-                (user: LeaderboardType, index: number) => (
-                  <tr key={user.userId}>
-                    <td className="font-semibold">
-                      {index === 0
-                        ? "🥇"
-                        : index === 1
-                        ? "🥈"
-                        : index === 2
-                        ? "🥉"
-                        : index + 1}
-                    </td>
-                    <td className="font-medium">{user.username}</td>
-                    <td>{user.lvl}</td>
-                    <td>{user.totalXp}</td>
-                    <td>{user.ranked || "Recruit"}</td>
-                    <td className="font-bold text-accent">
-                      {Math.round(user.score)}
-                    </td>
-                  </tr>
-                )
-              )}
+            {leaderboardData.scores.map(
+              (user: LeaderboardType, index: number) => (
+                <tr key={user.userId}>
+                  <td className="font-semibold">
+                    {index === 0
+                      ? "🥇"
+                      : index === 1
+                      ? "🥈"
+                      : index === 2
+                      ? "🥉"
+                      : index + 1}
+                  </td>
+                  <td className="font-medium">{user.username}</td>
+                  <td>{user.lvl}</td>
+                  <td>{user.totalXp}</td>
+                  <td>{user.ranked || "Recruit"}</td>
+                  <td className="font-bold text-accent">
+                    {Math.round(user.score)}
+                  </td>
+                </tr>
+              )
+            )}
           </tbody>
         </table>
       </div>

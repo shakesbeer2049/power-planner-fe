@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getYears, months } from "../utils/daysAndDates";
 import { callApi } from "../utils/callApi";
-import { TaskDetailsType } from "../types/types";
+import type { TaskDetailsType } from "../types/types";
 
 const Performance: React.FC = () => {
   const [taskList, setTaskList] = useState<TaskDetailsType[]>([]);

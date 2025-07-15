@@ -1,6 +1,8 @@
 import "../styles/home.css";
 import "../styles/register.css";
-import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import type { FieldValues } from "react-hook-form";
+import type { SubmitHandler } from "react-hook-form";
 import { callApi } from "../utils/callApi";
 import { useAuth } from "../context/AuthContext";
 import Nav from "./Nav";

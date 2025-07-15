@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useTask } from "../context/TaskContext";
 import { useAuth } from "../context/AuthContext";
-import { TaskDetailsType } from "../types/types";
+import type { TaskDetailsType } from "../types/types";
 import { motion } from "framer-motion";
 import "../styles/drawer.css";
 

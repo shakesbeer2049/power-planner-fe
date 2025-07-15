@@ -1,6 +1,6 @@
 import { useTask } from "../context/TaskContext";
 
-import { DeleteTaskModalProps } from "../types/types";
+import type { DeleteTaskModalProps } from "../types/types";
 
 const DeleteTaskModal: React.FC<DeleteTaskModalProps> = ({ task }) => {
   const context = useTask();

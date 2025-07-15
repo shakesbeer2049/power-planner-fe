@@ -5,8 +5,8 @@ import useApiCaller from "../hooks/useApiCaller";
 import { useAuth } from "./AuthContext";
 import { jwtDecode } from "jwt-decode";
 import { callApi } from "../utils/callApi";
-import { CustomJWTPayload } from "../types/types";
-import { TaskDetailsType } from "../types/types";
+import type { CustomJWTPayload } from "../types/types";
+import type { TaskDetailsType } from "../types/types";
 
 type APICallerType = {
   data: unknown;
@@ -70,15 +70,19 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
       : import.meta.env.VITE_PROD_BE_URL;
 
   const {
-    data: taskData,
+    data: taskData = {} as { tasks: TaskDetailsType[] },
     isError: taskError,
     isLoading: tasksLoading,
   }: APICallerType = useApiCaller(url + "/tasks", "GET", {});
 
   // Effects
   useEffect(() => {
-    if (!tasksLoading && !taskError) {
-      setTaskList(taskData?.tasks);
+    if (
+      !tasksLoading &&
+      !taskError &&
+      Array.isArray((taskData as { tasks: TaskDetailsType[] }).tasks)
+    ) {
+      setTaskList((taskData as { tasks: TaskDetailsType[] }).tasks);
     }
   }, [tasksLoading, taskData]);
 

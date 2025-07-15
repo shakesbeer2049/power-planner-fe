@@ -1,11 +1,5 @@
-import {
-  useState,
-  createContext,
-  ReactNode,
-  Dispatch,
-  SetStateAction,
-  useContext,
-} from "react";
+import { useState, createContext, useContext } from "react";
+import type { ReactNode, Dispatch, SetStateAction } from "react";
 
 // Define the shape of user details (adjust as needed)
 type UserDetailsType = Record<string, string> | null;

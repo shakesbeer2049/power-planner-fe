@@ -1,7 +1,7 @@
 import DeleteTaskModal from "./DeleteTaskModal";
 import { TbMoodEmpty } from "react-icons/tb";
 import "../styles/Task.css";
-import { TaskDetailsType } from "../types/types";
+import type { TaskDetailsType } from "../types/types";
 import { useTask } from "../context/TaskContext";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
